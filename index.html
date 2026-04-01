@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -11,1300 +12,2104 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   <style>
     /* ─── RESET ─────────────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-    :root {
-      --bg:       #FFFDF7;
-      --teal:     #0F766E;
-      --teal-dk:  #0A5954;
-      --mango:    #F59E0B;
-      --orange:   #F97316;
-      --green:    #22C55E;
-      --red:      #EF4444;
-      --text:     #0F172A;
-      --muted:    #64748B;
-      --card:     #FFFFFF;
-      --border:   #E2E8F0;
-      --r:        20px;
-      --sh:       0 4px 24px rgba(15,23,42,0.08);
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
     }
-    html, body { height: 100%; width: 100%; overflow: hidden; background: var(--bg); }
-    body { font-family: 'Nunito', sans-serif; color: var(--text); display: flex; justify-content: center; }
+
+    :root {
+      --bg: #FFFDF7;
+      --teal: #0F766E;
+      --teal-dk: #0A5954;
+      --mango: #F59E0B;
+      --orange: #F97316;
+      --green: #22C55E;
+      --red: #EF4444;
+      --text: #0F172A;
+      --muted: #64748B;
+      --card: #FFFFFF;
+      --border: #E2E8F0;
+      --r: 20px;
+      --sh: 0 4px 24px rgba(15, 23, 42, 0.08);
+    }
+
+    html,
+    body {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+    }
 
     /* ─── APP SHELL ─────────────────────────────────────────── */
     #app {
-      width: 100%; max-width: 430px;
-      height: 100vh; height: 100dvh;
-      position: relative; overflow: hidden;
+      width: 100%;
+      max-width: 430px;
+      height: 100vh;
+      height: 100dvh;
+      position: relative;
+      overflow: hidden;
       background: var(--bg);
     }
 
     /* ─── SCREENS ────────────────────────────────────────────── */
     .screen {
-      position: absolute; inset: 0;
-      overflow-y: auto; overflow-x: hidden;
+      position: absolute;
+      inset: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
       padding: 24px 20px 40px;
-      display: flex; flex-direction: column; gap: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
       transition: opacity .22s ease, transform .22s ease;
     }
-    .screen.off { opacity: 0; pointer-events: none; transform: translateX(18px); }
+
+    .screen.off {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(18px);
+    }
 
     /* ─── LOADING ────────────────────────────────────────────── */
     #loading {
-      position: fixed; inset: 0; z-index: 999;
+      position: fixed;
+      inset: 0;
+      z-index: 999;
       background: var(--bg);
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center; gap: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
     }
-    #loading .spin { font-size: 52px; animation: spin 1.4s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    #loading p { font-size: 15px; font-weight: 700; color: var(--muted); }
+
+    #loading .spin {
+      font-size: 52px;
+      animation: spin 1.4s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    #loading p {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--muted);
+    }
 
     /* ─── LOGO ───────────────────────────────────────────────── */
-    .logo { text-align: center; }
-    .logo-icon { font-size: 44px; line-height: 1; margin-bottom: 4px; }
-    .logo-title {
-      font-size: 28px; font-weight: 900; color: var(--teal);
-      letter-spacing: -0.5px; line-height: 1.1;
+    .logo {
+      text-align: center;
     }
+
+    .logo-icon {
+      font-size: 44px;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .logo-title {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--teal);
+      letter-spacing: -0.5px;
+      line-height: 1.1;
+    }
+
     .logo-sub {
-      font-size: 11px; font-weight: 700; color: var(--muted);
-      letter-spacing: 2.5px; text-transform: uppercase;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
     }
 
     /* ─── BUTTONS ────────────────────────────────────────────── */
     .btn {
-      display: block; width: 100%;
-      padding: 17px 24px; border: none; border-radius: 100px;
-      font-family: 'Nunito', sans-serif; font-size: 18px; font-weight: 800;
-      cursor: pointer; transition: transform .1s, opacity .1s; text-align: center;
+      display: block;
+      width: 100%;
+      padding: 17px 24px;
+      border: none;
+      border-radius: 100px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform .1s, opacity .1s;
+      text-align: center;
       text-decoration: none;
     }
-    .btn:active { transform: scale(0.97); }
-    .btn:disabled { opacity: 0.45; pointer-events: none; }
-    .btn-primary   { background: var(--teal); color: #fff; }
-    .btn-mango     { background: var(--mango); color: var(--text); }
-    .btn-ghost     { background: transparent; border: 2px solid var(--border); color: var(--muted); }
-    .btn-outline   { background: transparent; border: 2.5px solid var(--teal); color: var(--teal); }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      pointer-events: none;
+    }
+
+    .btn-primary {
+      background: var(--teal);
+      color: #fff;
+    }
+
+    .btn-mango {
+      background: var(--mango);
+      color: var(--text);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border: 2px solid var(--border);
+      color: var(--muted);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2.5px solid var(--teal);
+      color: var(--teal);
+    }
 
     /* ─── HOME SCREEN ────────────────────────────────────────── */
-    #screen-home { gap: 14px; }
+    #screen-home {
+      gap: 14px;
+    }
 
     .hero {
       background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dk) 100%);
-      border-radius: var(--r); padding: 20px 22px; color: #fff;
-      position: relative; overflow: hidden;
+      border-radius: var(--r);
+      padding: 20px 22px;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
     }
+
     .hero::after {
-      content: '🔍'; position: absolute; right: -16px; top: -16px;
-      font-size: 110px; opacity: .09; line-height: 1;
+      content: '🔍';
+      position: absolute;
+      right: -16px;
+      top: -16px;
+      font-size: 110px;
+      opacity: .09;
+      line-height: 1;
     }
-    .hero-title { font-size: 22px; font-weight: 900; line-height: 1.2; margin-bottom: 8px; }
-    .hero-title em { color: var(--mango); font-style: normal; }
-    .hero-body { font-size: 13px; font-weight: 600; opacity: .88; line-height: 1.65; }
+
+    .hero-title {
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .hero-title em {
+      color: var(--mango);
+      font-style: normal;
+    }
+
+    .hero-body {
+      font-size: 13px;
+      font-weight: 600;
+      opacity: .88;
+      line-height: 1.65;
+    }
 
     .hero-badges {
-      display: flex; gap: 7px; flex-wrap: wrap; margin-top: 12px;
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+      margin-top: 12px;
     }
+
     .hero-badge {
-      background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);
-      border-radius: 100px; padding: 4px 11px;
-      font-size: 11px; font-weight: 800; color: #fff;
-      display: flex; align-items: center; gap: 4px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 100px;
+      padding: 4px 11px;
+      font-size: 11px;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 4px;
     }
 
     .today-card {
-      background: var(--card); border-radius: var(--r);
-      box-shadow: var(--sh); padding: 15px 18px;
+      background: var(--card);
+      border-radius: var(--r);
+      box-shadow: var(--sh);
+      padding: 15px 18px;
       border-left: 5px solid var(--mango);
-      position: relative; overflow: hidden;
+      position: relative;
+      overflow: hidden;
     }
-    .today-card::after {
-      content: '📁'; position: absolute; right: 14px; top: 50%;
-      transform: translateY(-50%); font-size: 32px; opacity: .12;
-    }
-    .today-label {
-      font-size: 11px; font-weight: 800; color: var(--mango);
-      text-transform: uppercase; letter-spacing: 2px; margin-bottom: 4px;
-    }
-    .today-name  { font-size: 19px; font-weight: 900; }
-    .today-brand { font-size: 12px; color: var(--muted); font-weight: 600; margin-top: 2px; }
 
-    .timer-line { text-align: center; font-size: 13px; color: var(--muted); font-weight: 600; }
-    .timer-line b { color: var(--teal); }
+    .today-card::after {
+      content: '📁';
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 32px;
+      opacity: .12;
+    }
+
+    .today-label {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--mango);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 4px;
+    }
+
+    .today-name {
+      font-size: 19px;
+      font-weight: 900;
+    }
+
+    .today-brand {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    .timer-line {
+      text-align: center;
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .timer-line b {
+      color: var(--teal);
+    }
+
+    /* ─── TODAY CARD IMAGE ──────────────────────────────────── */
+    .today-card-inner {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .today-img {
+      width: 72px;
+      height: 72px;
+      border-radius: 12px;
+      object-fit: cover;
+      flex-shrink: 0;
+      display: none;
+    }
+
+    /* ─── HERO STEPS ────────────────────────────────────────── */
+    .hero-steps {
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .hero-step {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hero-step-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--mango);
+      color: #000;
+      font-size: 12px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .hero-step-txt {
+      font-size: 13px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.92);
+      line-height: 1.4;
+    }
 
     .home-meta {
-      display: flex; justify-content: space-between; align-items: center;
-      font-size: 12px; color: var(--muted); font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
     }
-    .home-meta a { color: var(--muted); text-decoration: none; }
-    .home-meta a:hover { color: var(--teal); }
+
+    .home-meta a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .home-meta a:hover {
+      color: var(--teal);
+    }
+
     .btn-info {
-      background: none; border: none; color: var(--teal);
-      font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 800;
-      cursor: pointer; display: flex; align-items: center; gap: 4px;
+      background: none;
+      border: none;
+      color: var(--teal);
+      font-family: 'Nunito', sans-serif;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
     }
 
     /* ─── INFO MODAL HOW-TO ──────────────────────────────────── */
     .how-steps {
-      display: grid; grid-template-columns: 1fr 1fr 1fr;
-      gap: 10px; margin: 14px 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 14px 0;
     }
+
     .how-step {
-      background: var(--bg); border-radius: 14px; padding: 14px 8px; text-align: center;
+      background: var(--bg);
+      border-radius: 14px;
+      padding: 14px 8px;
+      text-align: center;
     }
-    .how-step-icon { font-size: 26px; margin-bottom: 6px; }
-    .how-step-text { font-size: 12px; font-weight: 700; color: var(--text); line-height: 1.4; }
+
+    .how-step-icon {
+      font-size: 26px;
+      margin-bottom: 6px;
+    }
+
+    .how-step-text {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.4;
+    }
 
     /* ─── REGISTER SCREEN ────────────────────────────────────── */
-    .reg-top { text-align: center; padding-top: 12px; }
-    .reg-emoji { font-size: 48px; margin-bottom: 8px; }
-    .reg-heading { font-size: 24px; font-weight: 900; }
-    .reg-sub { font-size: 14px; color: var(--muted); font-weight: 600; margin-top: 4px; }
-
-    .form-group { display: flex; flex-direction: column; gap: 8px; }
-    .form-label {
-      font-size: 12px; font-weight: 800; color: var(--muted);
-      text-transform: uppercase; letter-spacing: 1.5px;
+    .reg-top {
+      text-align: center;
+      padding-top: 12px;
     }
+
+    .reg-emoji {
+      font-size: 48px;
+      margin-bottom: 8px;
+    }
+
+    .reg-heading {
+      font-size: 24px;
+      font-weight: 900;
+    }
+
+    .reg-sub {
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-label {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
     .form-input {
-      padding: 16px 20px; border-radius: 16px; border: 2.5px solid var(--border);
-      font-family: 'Nunito', sans-serif; font-size: 18px; font-weight: 700;
-      color: var(--text); background: var(--card); outline: none;
+      padding: 16px 20px;
+      border-radius: 16px;
+      border: 2.5px solid var(--border);
+      font-family: 'Nunito', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      background: var(--card);
+      outline: none;
       transition: border-color .2s;
     }
-    .form-input:focus { border-color: var(--teal); }
-    .form-input.err   { border-color: var(--red); }
+
+    .form-input:focus {
+      border-color: var(--teal);
+    }
+
+    .form-input.err {
+      border-color: var(--red);
+    }
 
     /* ─── INVESTIGATE SCREEN ─────────────────────────────────── */
-    #screen-investigate { padding: 16px 16px 40px; gap: 14px; }
-
-    .inv-header { display: flex; align-items: flex-start; gap: 10px; }
-    .inv-header-text { flex: 1; }
-    .inv-case-num {
-      font-size: 11px; font-weight: 800; color: var(--mango);
-      text-transform: uppercase; letter-spacing: 2px;
+    #screen-investigate {
+      padding: 16px 16px 40px;
+      gap: 14px;
     }
-    .inv-case-title { font-size: 19px; font-weight: 900; line-height: 1.2; }
+
+    .inv-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .inv-header-text {
+      flex: 1;
+    }
+
+    .inv-case-num {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--mango);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .inv-case-title {
+      font-size: 19px;
+      font-weight: 900;
+      line-height: 1.2;
+    }
 
     /* Progress */
-    .progress-bar { display: flex; gap: 7px; }
+    .progress-bar {
+      display: flex;
+      gap: 7px;
+    }
+
     .pdot {
-      flex: 1; height: 9px; border-radius: 100px; background: var(--border);
+      flex: 1;
+      height: 9px;
+      border-radius: 100px;
+      background: var(--border);
       transition: background .35s ease;
     }
-    .pdot.active   { background: var(--mango); }
-    .pdot.correct  { background: var(--green); }
-    .pdot.wrong    { background: var(--red); }
+
+    .pdot.active {
+      background: var(--mango);
+    }
+
+    .pdot.correct {
+      background: var(--green);
+    }
+
+    .pdot.wrong {
+      background: var(--red);
+    }
 
     /* Product card */
     .product-card {
-      background: var(--card); border-radius: var(--r);
-      box-shadow: var(--sh); overflow: hidden; flex-shrink: 0;
+      background: var(--card);
+      border-radius: var(--r);
+      box-shadow: var(--sh);
+      overflow: hidden;
+      flex-shrink: 0;
     }
-    .tab-bar { display: flex; border-bottom: 2px solid var(--border); }
+
+    .tab-bar {
+      display: flex;
+      border-bottom: 2px solid var(--border);
+    }
+
     .tab-btn {
-      flex: 1; padding: 14px 4px; border: none; background: none;
-      font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 800;
-      color: var(--muted); cursor: pointer;
-      border-bottom: 3px solid transparent; margin-bottom: -2px;
+      flex: 1;
+      padding: 14px 4px;
+      border: none;
+      background: none;
+      font-family: 'Nunito', sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--muted);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
       transition: color .2s, border-color .2s;
     }
-    .tab-btn.on { color: var(--teal); border-bottom-color: var(--teal); }
 
-    .tab-panel { display: none; padding: 16px; }
+    .tab-btn.on {
+      color: var(--teal);
+      border-bottom-color: var(--teal);
+    }
+
+    .tab-panel {
+      display: none;
+      padding: 16px;
+    }
+
     /* Ingredients and Nutrition panels are scrollable; Front is not */
-    #tp-ingredients, #tp-nutrition { overflow-y: auto; max-height: 260px; }
-    .tab-panel.on { display: block; }
+    #tp-ingredients,
+    #tp-nutrition {
+      overflow-y: auto;
+      max-height: 260px;
+    }
+
+    .tab-panel.on {
+      display: block;
+    }
 
     /* Front tab */
     .img-wrap {
-      width: 100%; height: 150px;
-      border-radius: 14px; background: #F1F5F9;
-      overflow: hidden; cursor: pointer; margin-bottom: 10px;
-      display: flex; align-items: center; justify-content: center;
+      width: 100%;
+      height: 200px;
+      border-radius: 14px;
+      background: #F1F5F9;
+      overflow: hidden;
+      cursor: pointer;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .product-img { width: 100%; height: 100%; object-fit: cover; border-radius: 14px; }
-    .img-no-img { font-size: 60px; }
+
+    .product-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 14px;
+    }
+
+    .img-no-img {
+      font-size: 60px;
+    }
 
     .front-claim-box {
-      background: #FFF7ED; border-radius: 12px; padding: 12px 14px;
+      background: #FFF7ED;
+      border-radius: 12px;
+      padding: 12px 14px;
       border-left: 4px solid var(--mango);
     }
+
     .front-claim-label {
-      font-size: 10px; font-weight: 800; color: var(--mango);
-      text-transform: uppercase; letter-spacing: 2px; margin-bottom: 4px;
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--mango);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 4px;
     }
-    .front-claim-text { font-size: 15px; font-weight: 700; line-height: 1.5; }
+
+    .front-claim-text {
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.5;
+    }
 
     /* Ingredients tab */
     .ing-note {
-      font-size: 11px; font-weight: 700; color: var(--muted);
-      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
     }
-    .ing-list { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    .ing-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
     .ing-pill {
-      background: #F1F5F9; border-radius: 100px;
-      padding: 6px 14px; font-size: 13px; font-weight: 600; color: var(--text);
+      background: #F1F5F9;
+      border-radius: 100px;
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
     }
-    .ing-pill.top { background: #FFF7ED; color: #92400E; font-weight: 800; }
+
+    .ing-pill.top {
+      background: #FFF7ED;
+      color: #92400E;
+      font-weight: 800;
+    }
 
     /* Nutrition tab */
     .nut-note {
-      font-size: 11px; font-weight: 700; color: var(--muted);
-      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
     }
-    .nut-table { width: 100%; border-collapse: collapse; }
-    .nut-table tr { border-bottom: 1px solid var(--border); }
-    .nut-table tr:last-child { border-bottom: none; }
-    .nut-table td { padding: 9px 4px; font-size: 14px; }
-    .nut-table td:first-child { font-weight: 700; color: var(--text); }
-    .nut-table td:last-child { text-align: right; font-weight: 700; color: var(--teal); }
-    .nut-per { font-size: 11px; color: var(--muted); font-weight: 600; margin-top: 8px; }
 
-    .swipe-hint { text-align: center; font-size: 11px; color: var(--muted); font-weight: 600; }
+    .nut-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .nut-table tr {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nut-table tr:last-child {
+      border-bottom: none;
+    }
+
+    .nut-table td {
+      padding: 9px 4px;
+      font-size: 14px;
+    }
+
+    .nut-table td:first-child {
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .nut-table td:last-child {
+      text-align: right;
+      font-weight: 700;
+      color: var(--teal);
+    }
+
+    .nut-per {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 600;
+      margin-top: 8px;
+    }
+
+    .swipe-hint {
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 600;
+    }
 
     /* ─── CLAIM CARD ─────────────────────────────────────────── */
     .claim-card {
-      background: var(--card); border-radius: var(--r);
-      box-shadow: var(--sh); padding: 20px; flex-shrink: 0;
+      background: var(--card);
+      border-radius: var(--r);
+      box-shadow: var(--sh);
+      padding: 20px;
+      flex-shrink: 0;
     }
-    .claim-speaker { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+
+    .claim-speaker {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
     .speaker-avatar {
-      width: 38px; height: 38px; border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
       background: linear-gradient(135deg, var(--teal), var(--teal-dk));
-      display: flex; align-items: center; justify-content: center;
-      font-size: 20px; flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
     }
+
     .speaker-name {
-      font-size: 11px; font-weight: 900; color: var(--teal);
-      text-transform: uppercase; letter-spacing: 1.5px;
+      font-size: 11px;
+      font-weight: 900;
+      color: var(--teal);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
     }
-    .claim-counter { font-size: 11px; color: var(--muted); font-weight: 600; margin-top: 1px; }
+
+    .claim-counter {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 600;
+      margin-top: 1px;
+    }
 
     .claim-text {
-      font-size: 17px; font-weight: 700; line-height: 1.6;
-      background: #F8FAFC; border-radius: 14px; padding: 14px 16px;
-      border-left: 4px solid var(--teal); margin-bottom: 16px; color: var(--text);
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.6;
+      background: #F8FAFC;
+      border-radius: 14px;
+      padding: 14px 16px;
+      border-left: 4px solid var(--teal);
+      margin-bottom: 16px;
+      color: var(--text);
     }
 
-    .answer-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    /* Directive prompt above answer buttons */
+    .claim-directive {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--teal);
+      text-align: center;
+      padding: 0 0 12px;
+      letter-spacing: 0.3px;
+    }
+
+    .answer-btns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
     .btn-true {
-      padding: 16px; border-radius: 16px; border: 2.5px solid #86EFAC;
-      background: #DCFCE7; color: #15803D;
-      font-family: 'Nunito', sans-serif; font-size: 20px; font-weight: 900;
-      cursor: pointer; transition: transform .1s, background .15s;
+      padding: 16px;
+      border-radius: 16px;
+      border: 2.5px solid #86EFAC;
+      background: #DCFCE7;
+      color: #15803D;
+      font-family: 'Nunito', sans-serif;
+      font-size: 20px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: transform .1s, background .15s;
     }
+
     .btn-false {
-      padding: 16px; border-radius: 16px; border: 2.5px solid #FCA5A5;
-      background: #FEF2F2; color: #DC2626;
-      font-family: 'Nunito', sans-serif; font-size: 20px; font-weight: 900;
-      cursor: pointer; transition: transform .1s, background .15s;
+      padding: 16px;
+      border-radius: 16px;
+      border: 2.5px solid #FCA5A5;
+      background: #FEF2F2;
+      color: #DC2626;
+      font-family: 'Nunito', sans-serif;
+      font-size: 20px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: transform .1s, background .15s;
     }
-    .btn-true:active, .btn-false:active { transform: scale(0.96); }
-    .btn-true:disabled, .btn-false:disabled { opacity: 1; cursor: default; }
-    .btn-true.chosen  { background: var(--green); border-color: var(--green); color: #fff; }
-    .btn-false.chosen { background: var(--red);   border-color: var(--red);   color: #fff; }
+
+    .btn-true:active,
+    .btn-false:active {
+      transform: scale(0.96);
+    }
+
+    .btn-true:disabled,
+    .btn-false:disabled {
+      opacity: 1;
+      cursor: default;
+    }
+
+    .btn-true.chosen {
+      background: var(--green);
+      border-color: var(--green);
+      color: #fff;
+    }
+
+    .btn-false.chosen {
+      background: var(--red);
+      border-color: var(--red);
+      color: #fff;
+    }
 
     /* Feedback */
     .feedback-box {
-      margin-top: 14px; padding: 14px 16px; border-radius: 16px;
-      font-size: 15px; font-weight: 700; line-height: 1.6;
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.6;
       display: none;
     }
-    .feedback-box.show { display: block; animation: popIn .3s ease; }
-    .feedback-box.ok  { background: #DCFCE7; border: 2px solid #86EFAC; color: #14532D; }
-    .feedback-box.bad { background: #FEF2F2; border: 2px solid #FCA5A5; color: #7F1D1D; }
-    .feedback-emoji { font-size: 26px; display: block; margin-bottom: 4px; }
+
+    .feedback-box.show {
+      display: block;
+      animation: popIn .3s ease;
+    }
+
+    .feedback-box.ok {
+      background: #DCFCE7;
+      border: 2px solid #86EFAC;
+      color: #14532D;
+    }
+
+    .feedback-box.bad {
+      background: #FEF2F2;
+      border: 2px solid #FCA5A5;
+      color: #7F1D1D;
+    }
+
+    .feedback-emoji {
+      font-size: 26px;
+      display: block;
+      margin-bottom: 4px;
+    }
 
     .btn-next {
-      display: none; width: 100%; margin-top: 12px;
-      padding: 15px; border: none; border-radius: 100px;
-      background: var(--teal); color: #fff;
-      font-family: 'Nunito', sans-serif; font-size: 17px; font-weight: 800;
-      cursor: pointer; transition: transform .1s;
+      display: none;
+      width: 100%;
+      margin-top: 12px;
+      padding: 15px;
+      border: none;
+      border-radius: 100px;
+      background: var(--teal);
+      color: #fff;
+      font-family: 'Nunito', sans-serif;
+      font-size: 17px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform .1s;
     }
-    .btn-next.show { display: block; }
-    .btn-next:active { transform: scale(0.97); }
+
+    .btn-next.show {
+      display: block;
+    }
+
+    .btn-next:active {
+      transform: scale(0.97);
+    }
 
     /* ─── RESULTS SCREEN ─────────────────────────────────────── */
     .results-hero {
       background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dk) 100%);
-      border-radius: var(--r); padding: 32px 24px; color: #fff; text-align: center;
-      position: relative; overflow: hidden;
+      border-radius: var(--r);
+      padding: 40px 24px 32px;
+      color: #fff;
+      text-align: center;
+      position: relative;
+      overflow: visible;
     }
+
     .results-hero::before {
-      content: '🏆'; position: absolute; right: -10px; bottom: -10px;
-      font-size: 120px; opacity: .08; line-height: 1;
+      content: '🏆';
+      position: absolute;
+      right: -10px;
+      bottom: -10px;
+      font-size: 120px;
+      opacity: .08;
+      line-height: 1;
     }
-    .result-score { font-size: 76px; font-weight: 900; color: var(--mango); line-height: 1; }
-    .result-out   { font-size: 15px; opacity: .7; margin-bottom: 12px; font-weight: 600; }
-    .result-title { font-size: 30px; font-weight: 900; margin-bottom: 6px; }
-    .result-copy  { font-size: 15px; opacity: .85; font-weight: 600; }
 
-    .review-list { display: flex; flex-direction: column; gap: 10px; }
+    .result-score {
+      font-size: 72px;
+      font-weight: 900;
+      color: var(--mango);
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+
+    .result-out {
+      font-size: 15px;
+      opacity: .7;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .result-title {
+      font-size: 30px;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+
+    .result-copy {
+      font-size: 15px;
+      opacity: .85;
+      font-weight: 600;
+    }
+
+    .review-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
     .review-item {
-      background: var(--card); border-radius: 14px; padding: 12px 16px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
-      display: flex; align-items: flex-start; gap: 10px;
+      background: var(--card);
+      border-radius: 14px;
+      padding: 12px 16px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
     }
-    .review-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
-    .review-text { font-size: 13px; font-weight: 600; line-height: 1.5; color: var(--text); }
 
-    .actions { display: flex; flex-direction: column; gap: 12px; }
-    .res-timer { text-align: center; font-size: 13px; color: var(--muted); font-weight: 600; }
-    .res-timer b { color: var(--teal); }
+    .review-icon {
+      font-size: 18px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .review-text {
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.5;
+      color: var(--text);
+    }
+
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .res-timer {
+      text-align: center;
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .res-timer b {
+      color: var(--teal);
+    }
 
     /* ─── MODALS ─────────────────────────────────────────────── */
     .modal-wrap {
-      position: fixed; inset: 0;
-      background: rgba(15,23,42,.6);
-      display: flex; align-items: flex-end; justify-content: center;
-      z-index: 200; opacity: 0; pointer-events: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, .6);
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
       transition: opacity .28s ease;
     }
-    .modal-wrap.open { opacity: 1; pointer-events: all; }
+
+    .modal-wrap.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
     .modal-sheet {
-      background: var(--card); border-radius: 26px 26px 0 0;
-      padding: 20px 24px 48px; width: 100%; max-width: 430px;
-      max-height: 80vh; overflow-y: auto;
-      transform: translateY(100%); transition: transform .3s ease;
+      background: var(--card);
+      border-radius: 26px 26px 0 0;
+      padding: 20px 24px 48px;
+      width: 100%;
+      max-width: 430px;
+      max-height: 80vh;
+      overflow-y: auto;
+      transform: translateY(100%);
+      transition: transform .3s ease;
     }
-    .modal-wrap.open .modal-sheet { transform: translateY(0); }
+
+    .modal-wrap.open .modal-sheet {
+      transform: translateY(0);
+    }
+
     .modal-handle {
-      width: 40px; height: 4px; background: var(--border);
-      border-radius: 100px; margin: 0 auto 20px;
+      width: 40px;
+      height: 4px;
+      background: var(--border);
+      border-radius: 100px;
+      margin: 0 auto 20px;
     }
-    .modal-head { position: relative; margin-bottom: 16px; }
-    .modal-title { font-size: 21px; font-weight: 900; }
+
+    .modal-head {
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    .modal-title {
+      font-size: 21px;
+      font-weight: 900;
+    }
+
     .modal-close {
-      position: absolute; top: 0; right: 0;
-      width: 34px; height: 34px; border-radius: 50%;
-      background: var(--border); border: none; cursor: pointer;
-      font-size: 16px; display: flex; align-items: center; justify-content: center;
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--border);
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .modal-body { font-size: 15px; font-weight: 600; line-height: 1.85; color: var(--text); }
-    .modal-body p { margin-bottom: 14px; }
-    .modal-body p:last-child { margin-bottom: 0; }
+
+    .modal-body {
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.85;
+      color: var(--text);
+    }
+
+    .modal-body p {
+      margin-bottom: 14px;
+    }
+
+    .modal-body p:last-child {
+      margin-bottom: 0;
+    }
 
     /* ─── LIGHTBOX ───────────────────────────────────────────── */
     #lightbox {
-      position: fixed; inset: 0; background: rgba(0,0,0,.92);
-      z-index: 300; display: flex; align-items: center; justify-content: center;
-      opacity: 0; pointer-events: none; transition: opacity .25s;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .92);
+      z-index: 300;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s;
     }
-    #lightbox.open { opacity: 1; pointer-events: all; }
-    #lightbox img { max-width: 96%; max-height: 96vh; border-radius: 14px; object-fit: contain; }
+
+    #lightbox.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    #lightbox img {
+      max-width: 96%;
+      max-height: 96vh;
+      border-radius: 14px;
+      object-fit: contain;
+    }
+
     #lightbox-close {
-      position: absolute; top: 16px; right: 16px;
-      width: 40px; height: 40px; border-radius: 50%;
-      background: rgba(255,255,255,.2); border: none; color: #fff;
-      font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .2);
+      border: none;
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     /* ─── FALLBACK ───────────────────────────────────────────── */
     .fallback {
-      background: var(--card); border-radius: var(--r);
-      box-shadow: var(--sh); padding: 36px 24px; text-align: center;
+      background: var(--card);
+      border-radius: var(--r);
+      box-shadow: var(--sh);
+      padding: 36px 24px;
+      text-align: center;
     }
-    .fallback-icon  { font-size: 52px; margin-bottom: 14px; }
-    .fallback-title { font-size: 22px; font-weight: 900; margin-bottom: 8px; }
-    .fallback-body  { font-size: 15px; color: var(--muted); font-weight: 600; line-height: 1.6; }
+
+    .fallback-icon {
+      font-size: 52px;
+      margin-bottom: 14px;
+    }
+
+    .fallback-title {
+      font-size: 22px;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    .fallback-body {
+      font-size: 15px;
+      color: var(--muted);
+      font-weight: 600;
+      line-height: 1.6;
+    }
 
     /* ─── ANIMATIONS ─────────────────────────────────────────── */
     @keyframes popIn {
-      0%   { transform: scale(.85); opacity: 0; }
-      65%  { transform: scale(1.04); }
-      100% { transform: scale(1); opacity: 1; }
+      0% {
+        transform: scale(.85);
+        opacity: 0;
+      }
+
+      65% {
+        transform: scale(1.04);
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
     }
+
     @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      20%       { transform: translateX(-7px); }
-      60%       { transform: translateX(7px); }
+
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      20% {
+        transform: translateX(-7px);
+      }
+
+      60% {
+        transform: translateX(7px);
+      }
     }
-    .shake { animation: shake .35s ease; }
+
+    .shake {
+      animation: shake .35s ease;
+    }
   </style>
 </head>
+
 <body>
-<div id="app">
+  <div id="app">
 
-  <!-- ── LOADING ──────────────────────────────────────────────── -->
-  <div id="loading">
-    <div class="spin">🔍</div>
-    <p>Opening case files…</p>
-  </div>
-
-  <!-- ── HOME ─────────────────────────────────────────────────── -->
-  <div id="screen-home" class="screen off">
-    <div class="logo">
-      <div class="logo-icon">🔍</div>
-      <div class="logo-title">FBI Case Files</div>
-      <div class="logo-sub">Food &amp; Beverage Investigator</div>
+    <!-- ── LOADING ──────────────────────────────────────────────── -->
+    <div id="loading">
+      <div class="spin">🔍</div>
+      <p>Opening case files…</p>
     </div>
 
-    <div class="hero">
-      <div class="hero-title">Every pack tells a story.<br>But is it the <em>full</em> story?</div>
-      <div class="hero-body">Over a lifetime, people eat hundreds of kilos of packaged food — without ever reading the label. You are the FBI. Your job: open the case, read the facts, and find out what the pack isn't telling you.</div>
-      <div class="hero-badges">
-        <div class="hero-badge">📅 1 case a day</div>
-        <div class="hero-badge">🧠 5 claims to crack</div>
-        <div class="hero-badge">⏱️ New case at 8 AM</div>
-      </div>
-    </div>
-
-    <div class="today-card">
-      <div class="today-label">📁 Today's Case</div>
-      <div id="today-name" class="today-name">Loading…</div>
-      <div id="today-brand" class="today-brand"></div>
-    </div>
-
-    <button id="btn-start-home" class="btn btn-primary" onclick="goToRegister()">🕵️ Open Today's Case</button>
-
-    <div class="timer-line">Next case drops in <b id="home-timer">--:--:--</b></div>
-
-    <div class="home-meta">
-      <button class="btn-info" onclick="openModal('modal-info')">ℹ️ About this game</button>
-      <span>By <a href="https://www.linkedin.com/in/yajur-lath-4ba192158/" target="_blank" rel="noopener"><strong>Yajur Lath</strong></a></span>
-    </div>
-  </div>
-
-  <!-- ── REGISTER ──────────────────────────────────────────────── -->
-  <div id="screen-register" class="screen off">
-    <div class="reg-top">
-      <div class="reg-emoji">🕵️</div>
-      <div class="reg-heading">Who's investigating?</div>
-      <div class="reg-sub">Tell us who you are before we open the case.</div>
-    </div>
-
-    <div class="form-group">
-      <label class="form-label" for="inp-name">Your Name</label>
-      <input id="inp-name" class="form-input" type="text" placeholder="e.g. Arjun" autocomplete="off" />
-    </div>
-
-    <div class="form-group">
-      <label class="form-label" for="inp-age">Your Age</label>
-      <input id="inp-age" class="form-input" type="number" placeholder="e.g. 9" min="1" max="99" inputmode="numeric" />
-    </div>
-
-    <button class="btn btn-primary" onclick="startGame()">Open the Case 🗂️</button>
-    <button class="btn btn-ghost" onclick="goTo('home')">← Back</button>
-  </div>
-
-  <!-- ── INVESTIGATE ───────────────────────────────────────────── -->
-  <div id="screen-investigate" class="screen off">
-
-    <!-- Header -->
-    <div class="inv-header">
-      <div class="inv-header-text">
-        <div class="inv-case-num" id="inv-num">Case #01</div>
-        <div class="inv-case-title" id="inv-title">Product Name</div>
-      </div>
-    </div>
-
-    <!-- Progress -->
-    <div class="progress-bar" id="prog-bar">
-      <div class="pdot" data-i="0"></div>
-      <div class="pdot" data-i="1"></div>
-      <div class="pdot" data-i="2"></div>
-      <div class="pdot" data-i="3"></div>
-      <div class="pdot" data-i="4"></div>
-    </div>
-
-    <!-- Product card -->
-    <div class="product-card" id="product-card">
-      <div class="tab-bar">
-        <button class="tab-btn on" data-tab="front"       onclick="setTab('front')">Front</button>
-        <button class="tab-btn"    data-tab="ingredients" onclick="setTab('ingredients')">Ingredients</button>
-        <button class="tab-btn"    data-tab="nutrition"   onclick="setTab('nutrition')">Nutrition</button>
+    <!-- ── HOME ─────────────────────────────────────────────────── -->
+    <div id="screen-home" class="screen off">
+      <div class="logo">
+        <div class="logo-icon">🔍</div>
+        <div class="logo-title">FBI Case Files</div>
+        <div class="logo-sub">Food &amp; Beverage Investigator</div>
       </div>
 
-      <!-- Front -->
-      <div class="tab-panel on" id="tp-front">
-        <div class="img-wrap" id="img-wrap" onclick="openLightbox()">
-          <img id="product-img" class="product-img" src="" alt="Product" />
-        </div>
-        <div class="front-claim-box">
-          <div class="front-claim-label">📢 Says on the front</div>
-          <div id="front-claim-text" class="front-claim-text">—</div>
+      <div class="hero">
+        <div class="hero-title">Every pack tells a story.<br>Are you brave enough to find the <em>full</em> truth?</div>
+        <div class="hero-steps">
+          <div class="hero-step">
+            <span class="hero-step-num">1</span>
+            <span class="hero-step-txt">Open today's case</span>
+          </div>
+          <div class="hero-step">
+            <span class="hero-step-num">2</span>
+            <span class="hero-step-txt">Study the front, ingredients &amp; nutrition tabs</span>
+          </div>
+          <div class="hero-step">
+            <span class="hero-step-num">3</span>
+            <span class="hero-step-txt">Crack 5 claims — True or False?</span>
+          </div>
+          <div class="hero-step">
+            <span class="hero-step-num">4</span>
+            <span class="hero-step-txt">See your detective rank &amp; read the case notes</span>
+          </div>
         </div>
       </div>
 
-      <!-- Ingredients -->
-      <div class="tab-panel" id="tp-ingredients">
-        <div class="ing-note">Listed in order (most → least)</div>
-        <div id="ing-list" class="ing-list"></div>
-      </div>
-
-      <!-- Nutrition -->
-      <div class="tab-panel" id="tp-nutrition">
-        <div class="nut-note">Nutrition Facts</div>
-        <table id="nut-table" class="nut-table"></table>
-        <div id="nut-per" class="nut-per"></div>
-      </div>
-    </div>
-
-    <div class="swipe-hint">← swipe tabs →</div>
-
-    <!-- Claim card -->
-    <div class="claim-card" id="claim-card">
-      <div class="claim-speaker">
-        <div class="speaker-avatar">🔍</div>
-        <div>
-          <div class="speaker-name">Food &amp; Beverage Investigator</div>
-          <div class="claim-counter" id="claim-counter">Claim 1 of 5</div>
+      <div class="today-card">
+        <div class="today-card-inner">
+          <div style="flex:1;min-width:0;">
+            <div class="today-label">📁 Today's Case</div>
+            <div id="today-name" class="today-name">Loading…</div>
+            <div id="today-brand" class="today-brand"></div>
+          </div>
+          <img id="today-img" class="today-img" src="" alt="Today's case" />
         </div>
       </div>
 
-      <div class="claim-text" id="claim-text">Loading…</div>
+      <button id="btn-start-home" class="btn btn-primary" onclick="goToRegister()">🕵️ Open Today's Case</button>
 
-      <div class="answer-btns" id="answer-btns">
-        <button class="btn-true"  id="btn-true"  onclick="answer(true)">✅ True</button>
-        <button class="btn-false" id="btn-false" onclick="answer(false)">❌ False</button>
+      <div class="timer-line">Next case drops in <b id="home-timer">--:--:--</b></div>
+
+      <div class="home-meta">
+        <button class="btn-info" onclick="openModal('modal-info')">ℹ️ About this game</button>
+        <span>By <a href="https://www.linkedin.com/in/yajur-lath-4ba192158/" target="_blank"
+            rel="noopener"><strong>Yajur Lath</strong></a></span>
+      </div>
+    </div>
+
+    <!-- ── REGISTER ──────────────────────────────────────────────── -->
+    <div id="screen-register" class="screen off">
+      <div class="reg-top">
+        <div class="reg-emoji">🕵️</div>
+        <div class="reg-heading">Who's investigating?</div>
+        <div class="reg-sub">Tell us who you are before we open the case.</div>
       </div>
 
-      <div class="feedback-box" id="feedback-box">
-        <span class="feedback-emoji" id="fb-emoji"></span>
-        <div id="fb-text"></div>
+      <div class="form-group">
+        <label class="form-label" for="inp-name">Your Name</label>
+        <input id="inp-name" class="form-input" type="text" placeholder="e.g. Arjun" autocomplete="off" />
       </div>
 
-      <button class="btn-next" id="btn-next" onclick="nextClaim()">Next Claim →</button>
+      <div class="form-group">
+        <label class="form-label" for="inp-age">Your Age</label>
+        <input id="inp-age" class="form-input" type="number" placeholder="e.g. 9" min="1" max="99"
+          inputmode="numeric" />
+      </div>
+
+      <button class="btn btn-primary" onclick="startGame()">Open the Case 🗂️</button>
+      <button class="btn btn-ghost" onclick="goTo('home')">← Back</button>
     </div>
 
-  </div>
+    <!-- ── INVESTIGATE ───────────────────────────────────────────── -->
+    <div id="screen-investigate" class="screen off">
 
-  <!-- ── RESULTS ───────────────────────────────────────────────── -->
-  <div id="screen-results" class="screen off">
-    <div class="results-hero">
-      <div class="result-score" id="res-score">5/5</div>
-      <div class="result-out">out of 5 claims cracked</div>
-      <div class="result-title" id="res-title">Chief Detective</div>
-      <div class="result-copy" id="res-copy">Perfect. You caught every trick.</div>
-    </div>
-
-    <div class="review-list" id="review-list"></div>
-
-    <div class="actions">
-      <button class="btn btn-mango"   onclick="shareScore()">📤 Share My Score</button>
-      <button class="btn btn-outline" onclick="openModal('modal-notes')">📋 Case Notes</button>
-      <button class="btn btn-ghost"   onclick="playAgain()">🔄 Play Again</button>
-    </div>
-
-    <div class="res-timer">Next case in <b id="res-timer">--:--:--</b></div>
-  </div>
-
-</div><!-- #app -->
-
-<!-- ── LIGHTBOX ──────────────────────────────────────────────────── -->
-<div id="lightbox" onclick="closeLightbox()">
-  <img id="lb-img" src="" alt="Product zoom" />
-  <button id="lightbox-close" onclick="closeLightbox()">✕</button>
-</div>
-
-<!-- ── INFO MODAL ────────────────────────────────────────────────── -->
-<div id="modal-info" class="modal-wrap" onclick="backdropClose(event,'modal-info')">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <div class="modal-head">
-      <div class="modal-title">🔍 About This Game</div>
-      <button class="modal-close" onclick="closeModal('modal-info')">✕</button>
-    </div>
-    <div class="modal-body">
-      <p>Learning about the world should be the most exciting thing you do. Not the most boring. This game was built on that belief.</p>
-      <p>Every day, you buy food and drink that comes in a pack. That pack talks to you — loudly. <strong>"Real fruit!" "Natural!" "High in protein!"</strong> But is it telling the whole truth?</p>
-      <p>The FBI gives you the tools to find out. Read the front. Study the ingredients. Check the nutrition. Then crack five claims — and see how much the pack was hiding.</p>
-      <p>One case a day. Five minutes. A skill you'll use for the rest of your life.</p>
-
-      <p style="font-size:13px; font-weight:900; text-transform:uppercase; letter-spacing:1.5px; color:var(--teal); margin-bottom:0;">🕵️ How to Play</p>
-      <div class="how-steps">
-        <div class="how-step">
-          <div class="how-step-icon">📦</div>
-          <div class="how-step-text">Inspect the pack — front, ingredients &amp; nutrition</div>
-        </div>
-        <div class="how-step">
-          <div class="how-step-icon">🔍</div>
-          <div class="how-step-text">Crack 5 claims — True or False?</div>
-        </div>
-        <div class="how-step">
-          <div class="how-step-icon">🏆</div>
-          <div class="how-step-text">Earn your detective title &amp; share your score</div>
+      <!-- Header -->
+      <div class="inv-header">
+        <div class="inv-header-text">
+          <div class="inv-case-num" id="inv-num">Case #01</div>
+          <div class="inv-case-title" id="inv-title">Product Name</div>
         </div>
       </div>
 
-      <p style="padding-top: 8px; border-top: 1px solid var(--border); margin-bottom:0;">✨ <em>Inspired by <strong>Shashank Mehta</strong> and his work at <strong>The Whole Truth</strong> — a brand that believes honest food starts with honest labels.</em></p>
+      <!-- Progress -->
+      <div class="progress-bar" id="prog-bar">
+        <div class="pdot" data-i="0"></div>
+        <div class="pdot" data-i="1"></div>
+        <div class="pdot" data-i="2"></div>
+        <div class="pdot" data-i="3"></div>
+        <div class="pdot" data-i="4"></div>
+      </div>
+
+      <!-- Product card -->
+      <div class="product-card" id="product-card">
+        <div class="tab-bar">
+          <button class="tab-btn on" data-tab="front" onclick="setTab('front')">Front</button>
+          <button class="tab-btn" data-tab="ingredients" onclick="setTab('ingredients')">Ingredients</button>
+          <button class="tab-btn" data-tab="nutrition" onclick="setTab('nutrition')">Nutrition</button>
+        </div>
+
+        <!-- Front -->
+        <div class="tab-panel on" id="tp-front">
+          <div class="img-wrap" id="img-wrap" onclick="openLightbox()">
+            <img id="product-img" class="product-img" src="" alt="Product" />
+          </div>
+          <div class="front-claim-box">
+            <div class="front-claim-label">📢 Says on the front</div>
+            <div id="front-claim-text" class="front-claim-text">—</div>
+          </div>
+        </div>
+
+        <!-- Ingredients -->
+        <div class="tab-panel" id="tp-ingredients">
+          <div class="ing-note">Listed in order (most → least)</div>
+          <div id="ing-list" class="ing-list"></div>
+        </div>
+
+        <!-- Nutrition -->
+        <div class="tab-panel" id="tp-nutrition">
+          <div class="nut-note">Nutrition Facts</div>
+          <table id="nut-table" class="nut-table"></table>
+          <div id="nut-per" class="nut-per"></div>
+        </div>
+      </div>
+
+      <div class="swipe-hint">← swipe tabs →</div>
+
+      <!-- Claim card -->
+      <div class="claim-card" id="claim-card">
+        <div class="claim-speaker">
+          <div class="speaker-avatar">🔍</div>
+          <div>
+            <div class="speaker-name">Food &amp; Beverage Investigator</div>
+            <div class="claim-counter" id="claim-counter">Claim 1 of 5</div>
+          </div>
+        </div>
+
+        <div class="claim-text" id="claim-text">Loading…</div>
+
+        <div class="claim-directive">👆 Study the tabs above first, then decide</div>
+
+        <div class="answer-btns" id="answer-btns">
+          <button class="btn-true" id="btn-true" onclick="answer(true)">✅ True</button>
+          <button class="btn-false" id="btn-false" onclick="answer(false)">❌ False</button>
+        </div>
+
+        <div class="feedback-box" id="feedback-box">
+          <span class="feedback-emoji" id="fb-emoji"></span>
+          <div id="fb-text"></div>
+        </div>
+
+        <button class="btn-next" id="btn-next" onclick="nextClaim()">Next Claim →</button>
+      </div>
+
+    </div>
+
+    <!-- ── RESULTS ───────────────────────────────────────────────── -->
+    <div id="screen-results" class="screen off">
+      <div class="results-hero">
+        <div class="result-score" id="res-score">5/5</div>
+        <div class="result-out">out of 5 claims cracked</div>
+        <div class="result-title" id="res-title">Chief Detective</div>
+        <div class="result-copy" id="res-copy">Perfect. You caught every trick.</div>
+      </div>
+
+      <div class="review-list" id="review-list"></div>
+
+      <div class="actions">
+        <button class="btn btn-mango" onclick="shareScore()">📤 Share My Score</button>
+        <button class="btn btn-outline" onclick="openModal('modal-notes')">📋 Case Notes</button>
+        <button class="btn btn-ghost" onclick="playAgain()">🔄 Play Again</button>
+      </div>
+
+      <div class="res-timer">Next case in <b id="res-timer">--:--:--</b></div>
+    </div>
+
+  </div><!-- #app -->
+
+  <!-- ── LIGHTBOX ──────────────────────────────────────────────────── -->
+  <div id="lightbox" onclick="closeLightbox()">
+    <img id="lb-img" src="" alt="Product zoom" />
+    <button id="lightbox-close" onclick="closeLightbox()">✕</button>
+  </div>
+
+  <!-- ── INFO MODAL ────────────────────────────────────────────────── -->
+  <div id="modal-info" class="modal-wrap" onclick="backdropClose(event,'modal-info')">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-head">
+        <div class="modal-title">🔍 About This Game</div>
+        <button class="modal-close" onclick="closeModal('modal-info')">✕</button>
+      </div>
+      <div class="modal-body">
+        <p>Learning about the world should be the most exciting thing you do. Not the most boring. This game was built
+          on that belief.</p>
+        <p>Every day, you buy food and drink that comes in a pack. That pack talks to you — loudly. <strong>"Real
+            fruit!" "Natural!" "High in protein!"</strong> But is it telling the whole truth?</p>
+        <p>The FBI gives you the tools to find out. Read the front. Study the ingredients. Check the nutrition. Then
+          crack five claims — and see how much the pack was hiding.</p>
+        <p>One case a day. Five minutes. A skill you'll use for the rest of your life.</p>
+
+        <p
+          style="font-size:13px; font-weight:900; text-transform:uppercase; letter-spacing:1.5px; color:var(--teal); margin-bottom:0;">
+          🕵️ How to Play</p>
+        <div class="how-steps">
+          <div class="how-step">
+            <div class="how-step-icon">📦</div>
+            <div class="how-step-text">Inspect the pack — front, ingredients &amp; nutrition</div>
+          </div>
+          <div class="how-step">
+            <div class="how-step-icon">🔍</div>
+            <div class="how-step-text">Crack 5 claims — True or False?</div>
+          </div>
+          <div class="how-step">
+            <div class="how-step-icon">🏆</div>
+            <div class="how-step-text">Earn your detective title &amp; share your score</div>
+          </div>
+        </div>
+
+        <p style="padding-top: 8px; border-top: 1px solid var(--border); margin-bottom:0;">✨ <em>Inspired by
+            <strong>Shashank Mehta</strong> and his work at <strong>The Whole Truth</strong> — a brand that believes
+            honest food starts with honest labels.</em></p>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- ── CASE NOTES MODAL ──────────────────────────────────────────── -->
-<div id="modal-notes" class="modal-wrap" onclick="backdropClose(event,'modal-notes')">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <div class="modal-head">
-      <div class="modal-title">📋 Case Notes</div>
-      <button class="modal-close" onclick="closeModal('modal-notes')">✕</button>
+  <!-- ── CASE NOTES MODAL ──────────────────────────────────────────── -->
+  <div id="modal-notes" class="modal-wrap" onclick="backdropClose(event,'modal-notes')">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-head">
+        <div class="modal-title">📋 Case Notes</div>
+        <button class="modal-close" onclick="closeModal('modal-notes')">✕</button>
+      </div>
+      <div class="modal-body" id="notes-body">Loading…</div>
     </div>
-    <div class="modal-body" id="notes-body">Loading…</div>
   </div>
-</div>
 
-<!-- ── SHARE CANVAS (hidden) ─────────────────────────────────────── -->
-<canvas id="share-canvas" style="display:none;"></canvas>
+  <!-- ── SHARE CANVAS (hidden) ─────────────────────────────────────── -->
+  <canvas id="share-canvas" style="display:none;"></canvas>
 
-<script>
-/* ═══════════════════════════════════════════════════════════
-   CONFIG — edit these values after deployment
-═══════════════════════════════════════════════════════════ */
-const CFG = {
-  LAUNCH_DATE:    '2026-04-01',          // Case #1 goes live on this IST date
-  CSV_PATH:       './data/cases.csv',
-  SHEETS_WEBHOOK: 'YOUR_APPS_SCRIPT_URL',// Paste your Google Apps Script URL here
-  GAME_URL:       'https://verdant-cucurucho-e591e1.netlify.app', // Your live game URL (for share card)
-};
+  <script>
+    /* ═══════════════════════════════════════════════════════════
+       CONFIG — edit these values after deployment
+    ═══════════════════════════════════════════════════════════ */
+    const CFG = {
+      LAUNCH_DATE: '2026-04-01',          // Case #1 goes live on this IST date
+      CSV_PATH: './data/cases.csv',
+      SHEETS_WEBHOOK: 'YOUR_APPS_SCRIPT_URL',// Paste your Google Apps Script URL here
+      GAME_URL: 'https://foodandbeverageinvestigator.com', // Your live game URL (for share card)
+    };
 
-/* ═══════════════════════════════════════════════════════════
-   SCORE COPY
-═══════════════════════════════════════════════════════════ */
-const TITLES = ['Trainee','Junior Agent','Clue Spotter','Case Cracker','Sharp Investigator','Chief Detective'];
-const COPY   = [
-  'This pack completely fooled you today.',
-  'Tough case. You caught one clue.',
-  'Nice try. You spotted a couple of tricks.',
-  'Solid work. You\'re getting sharper.',
-  'Great job. Only one clue slipped away.',
-  'Perfect. You caught every trick.',
-];
+    /* ═══════════════════════════════════════════════════════════
+       SCORE COPY
+    ═══════════════════════════════════════════════════════════ */
+    const TITLES = ['Trainee', 'Junior Agent', 'Clue Spotter', 'Case Cracker', 'Sharp Investigator', 'Chief Detective'];
+    const COPY = [
+      'This pack completely fooled you today.',
+      'Tough case. You caught one clue.',
+      'Nice try. You spotted a couple of tricks.',
+      'Solid work. You\'re getting sharper.',
+      'Great job. Only one clue slipped away.',
+      'Perfect. You caught every trick.',
+    ];
 
-/* ═══════════════════════════════════════════════════════════
-   STATE
-═══════════════════════════════════════════════════════════ */
-const S = {
-  cases:       [],
-  today:       null,
-  claims:      [],   // shuffled
-  claimIdx:    0,
-  answers:     [],
-  score:       0,
-  user:        { name: '', age: '' },
-  activeTab:   'front',
-  answered:    false,
-  timerTick:   null,
-};
+    /* ═══════════════════════════════════════════════════════════
+       STATE
+    ═══════════════════════════════════════════════════════════ */
+    const S = {
+      cases: [],
+      today: null,
+      claims: [],   // shuffled
+      claimIdx: 0,
+      answers: [],
+      score: 0,
+      user: { name: '', age: '' },
+      activeTab: 'front',
+      answered: false,
+      timerTick: null,
+    };
 
-/* ═══════════════════════════════════════════════════════════
-   IST DATE HELPERS
-═══════════════════════════════════════════════════════════ */
-function nowIST() {
-  // IST = UTC + 5h 30m
-  return new Date(Date.now() + 5.5 * 3600000);
-}
-
-/** Returns the IST date string (YYYY-MM-DD) that the game should show today.
- *  Before 8:00 AM IST → yesterday's date.
- *  At or after 8:00 AM IST → today's date. */
-function activeDateIST() {
-  const ist = nowIST();
-  if (ist.getUTCHours() < 8) {
-    ist.setUTCDate(ist.getUTCDate() - 1);
-  }
-  return ist.toISOString().slice(0, 10);
-}
-
-/** Case #1 = LAUNCH_DATE.  Returns 1-based case number. */
-function caseNumberForDate(dateStr) {
-  const launch = Date.UTC(
-    +CFG.LAUNCH_DATE.slice(0,4),
-    +CFG.LAUNCH_DATE.slice(5,7) - 1,
-    +CFG.LAUNCH_DATE.slice(8,10)
-  );
-  const target = Date.UTC(
-    +dateStr.slice(0,4),
-    +dateStr.slice(5,7) - 1,
-    +dateStr.slice(8,10)
-  );
-  return Math.floor((target - launch) / 86400000) + 1;
-}
-
-/** Returns the real-world Date object for the next 8:00 AM IST. */
-function nextCaseAt() {
-  // 8:00 AM IST = 02:30 UTC
-  const ist = nowIST();
-  const next = new Date(Date.UTC(
-    ist.getUTCFullYear(), ist.getUTCMonth(), ist.getUTCDate(),
-    2, 30, 0, 0
-  ));
-  if (next.getTime() <= Date.now()) next.setUTCDate(next.getUTCDate() + 1);
-  return next;
-}
-
-function fmtCountdown(msLeft) {
-  if (msLeft <= 0) return 'Any moment now!';
-  const h = Math.floor(msLeft / 3600000);
-  const m = Math.floor((msLeft % 3600000) / 60000);
-  const s = Math.floor((msLeft % 60000)   / 1000);
-  return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-}
-
-/* ═══════════════════════════════════════════════════════════
-   INIT — load CSV, pick today's case, start
-═══════════════════════════════════════════════════════════ */
-async function init() {
-  try {
-    const raw  = await fetch(CFG.CSV_PATH).then(r => { if (!r.ok) throw new Error(r.status); return r.text(); });
-    const parsed = Papa.parse(raw, { header: true, skipEmptyLines: true });
-    S.cases = parsed.data;
-
-    const dateStr = activeDateIST();
-    const num     = caseNumberForDate(dateStr);
-    S.today = S.cases.find(r => parseInt(r['#']) === num) || null;
-
-    if (S.today) {
-      document.getElementById('today-name').textContent  = S.today.product_name || 'Unknown product';
-      document.getElementById('today-brand').textContent = [S.today.brand, S.today.category].filter(Boolean).join(' · ');
-    } else {
-      document.getElementById('today-name').textContent  = 'No case today.';
-      document.getElementById('today-brand').textContent = 'Please check back soon!';
-      document.getElementById('btn-start-home').disabled = true;
+    /* ═══════════════════════════════════════════════════════════
+       IST DATE HELPERS
+    ═══════════════════════════════════════════════════════════ */
+    function nowIST() {
+      // IST = UTC + 5h 30m
+      return new Date(Date.now() + 5.5 * 3600000);
     }
 
-    startCountdown();
-    goTo('home');
-  } catch (err) {
-    console.error('CSV load error:', err);
-    document.getElementById('loading').innerHTML = `
+    /** Returns the IST date string (YYYY-MM-DD) that the game should show today.
+     *  Before 8:00 AM IST → yesterday's date.
+     *  At or after 8:00 AM IST → today's date. */
+    function activeDateIST() {
+      const ist = nowIST();
+      if (ist.getUTCHours() < 8) {
+        ist.setUTCDate(ist.getUTCDate() - 1);
+      }
+      return ist.toISOString().slice(0, 10);
+    }
+
+    /** Case #1 = LAUNCH_DATE.  Returns 1-based case number. */
+    function caseNumberForDate(dateStr) {
+      const launch = Date.UTC(
+        +CFG.LAUNCH_DATE.slice(0, 4),
+        +CFG.LAUNCH_DATE.slice(5, 7) - 1,
+        +CFG.LAUNCH_DATE.slice(8, 10)
+      );
+      const target = Date.UTC(
+        +dateStr.slice(0, 4),
+        +dateStr.slice(5, 7) - 1,
+        +dateStr.slice(8, 10)
+      );
+      return Math.floor((target - launch) / 86400000) + 1;
+    }
+
+    /** Returns the real-world Date object for the next 8:00 AM IST. */
+    function nextCaseAt() {
+      // 8:00 AM IST = 02:30 UTC
+      const ist = nowIST();
+      const next = new Date(Date.UTC(
+        ist.getUTCFullYear(), ist.getUTCMonth(), ist.getUTCDate(),
+        2, 30, 0, 0
+      ));
+      if (next.getTime() <= Date.now()) next.setUTCDate(next.getUTCDate() + 1);
+      return next;
+    }
+
+    function fmtCountdown(msLeft) {
+      if (msLeft <= 0) return 'Any moment now!';
+      const h = Math.floor(msLeft / 3600000);
+      const m = Math.floor((msLeft % 3600000) / 60000);
+      const s = Math.floor((msLeft % 60000) / 1000);
+      return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       INIT — load CSV, pick today's case, start
+    ═══════════════════════════════════════════════════════════ */
+    async function init() {
+      try {
+        const raw = await fetch(CFG.CSV_PATH).then(r => { if (!r.ok) throw new Error(r.status); return r.text(); });
+        const parsed = Papa.parse(raw, { header: true, skipEmptyLines: true });
+        S.cases = parsed.data;
+
+        const dateStr = activeDateIST();
+        const num = caseNumberForDate(dateStr);
+        S.today = S.cases.find(r => parseInt(r['#']) === num) || null;
+
+        if (S.today) {
+          document.getElementById('today-name').textContent = S.today.product_name || 'Unknown product';
+          document.getElementById('today-brand').textContent = [S.today.brand, S.today.category].filter(Boolean).join(' · ');
+          // Show today's product image on home card
+          const todayImg = document.getElementById('today-img');
+          if (S.today.generated_photo_link) {
+            todayImg.src = S.today.generated_photo_link;
+            todayImg.style.display = '';
+            todayImg.onerror = () => { todayImg.style.display = 'none'; };
+          }
+        } else {
+          document.getElementById('today-name').textContent = 'No case today.';
+          document.getElementById('today-brand').textContent = 'Please check back soon!';
+          document.getElementById('btn-start-home').disabled = true;
+        }
+
+        startCountdown();
+        goTo('home');
+      } catch (err) {
+        console.error('CSV load error:', err);
+        document.getElementById('loading').innerHTML = `
       <div class="fallback" style="margin:24px;">
         <div class="fallback-icon">🗂️</div>
         <div class="fallback-title">Case Files Unavailable</div>
         <div class="fallback-body">Could not load cases.<br>Make sure the CSV is in <code>data/cases.csv</code> and refresh.</div>
       </div>`;
-    return;
-  }
-  document.getElementById('loading').style.display = 'none';
-}
+        return;
+      }
+      document.getElementById('loading').style.display = 'none';
+    }
 
-/* ═══════════════════════════════════════════════════════════
-   COUNTDOWN
-═══════════════════════════════════════════════════════════ */
-function startCountdown() {
-  function tick() {
-    const left = nextCaseAt() - Date.now();
-    const str  = fmtCountdown(left);
-    const ht = document.getElementById('home-timer');
-    const rt = document.getElementById('res-timer');
-    if (ht) ht.textContent = str;
-    if (rt) rt.textContent = str;
-  }
-  tick();
-  if (S.timerTick) clearInterval(S.timerTick);
-  S.timerTick = setInterval(tick, 1000);
-}
+    /* ═══════════════════════════════════════════════════════════
+       COUNTDOWN
+    ═══════════════════════════════════════════════════════════ */
+    function startCountdown() {
+      function tick() {
+        const left = nextCaseAt() - Date.now();
+        const str = fmtCountdown(left);
+        const ht = document.getElementById('home-timer');
+        const rt = document.getElementById('res-timer');
+        if (ht) ht.textContent = str;
+        if (rt) rt.textContent = str;
+      }
+      tick();
+      if (S.timerTick) clearInterval(S.timerTick);
+      S.timerTick = setInterval(tick, 1000);
+    }
 
-/* ═══════════════════════════════════════════════════════════
-   NAVIGATION
-═══════════════════════════════════════════════════════════ */
-function goTo(name) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.add('off'));
-  const el = document.getElementById('screen-' + name);
-  if (el) { el.classList.remove('off'); el.scrollTop = 0; }
-}
-function goToRegister() { if (S.today) goTo('register'); }
+    /* ═══════════════════════════════════════════════════════════
+       NAVIGATION
+    ═══════════════════════════════════════════════════════════ */
+    function goTo(name) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.add('off'));
+      const el = document.getElementById('screen-' + name);
+      if (el) { el.classList.remove('off'); el.scrollTop = 0; }
+    }
+    function goToRegister() { if (S.today) goTo('register'); }
 
-/* ═══════════════════════════════════════════════════════════
-   REGISTER → GAME START
-═══════════════════════════════════════════════════════════ */
-function startGame() {
-  const nameEl = document.getElementById('inp-name');
-  const ageEl  = document.getElementById('inp-age');
-  nameEl.classList.remove('err');
-  ageEl.classList.remove('err');
+    /* ═══════════════════════════════════════════════════════════
+       REGISTER → GAME START
+    ═══════════════════════════════════════════════════════════ */
+    function startGame() {
+      const nameEl = document.getElementById('inp-name');
+      const ageEl = document.getElementById('inp-age');
+      nameEl.classList.remove('err');
+      ageEl.classList.remove('err');
 
-  const name = nameEl.value.trim();
-  const age  = parseInt(ageEl.value.trim(), 10);
+      const name = nameEl.value.trim();
+      const age = parseInt(ageEl.value.trim(), 10);
 
-  let ok = true;
-  if (!name)             { nameEl.classList.add('err'); nameEl.focus(); ok = false; }
-  if (!age || age < 1 || age > 99) { ageEl.classList.add('err');  if (ok) ageEl.focus(); ok = false; }
-  if (!ok) return;
+      let ok = true;
+      if (!name) { nameEl.classList.add('err'); nameEl.focus(); ok = false; }
+      if (!age || age < 1 || age > 99) { ageEl.classList.add('err'); if (ok) ageEl.focus(); ok = false; }
+      if (!ok) return;
 
-  S.user = { name, age };
-  buildInvestigate();
-  goTo('investigate');
-}
+      S.user = { name, age };
+      buildInvestigate();
+      goTo('investigate');
+    }
 
-/* ═══════════════════════════════════════════════════════════
-   INGREDIENT PARSER (respects parentheses)
-═══════════════════════════════════════════════════════════ */
-function parseIngredients(text) {
-  if (!text) return [];
-  const result = [];
-  let cur = '', depth = 0;
-  for (const ch of text) {
-    if (ch === '(') depth++;
-    else if (ch === ')') depth--;
-    if (ch === ',' && depth === 0) {
+    /* ═══════════════════════════════════════════════════════════
+       INGREDIENT PARSER (respects parentheses)
+    ═══════════════════════════════════════════════════════════ */
+    function parseIngredients(text) {
+      if (!text) return [];
+      const result = [];
+      let cur = '', depth = 0;
+      for (const ch of text) {
+        if (ch === '(') depth++;
+        else if (ch === ')') depth--;
+        if (ch === ',' && depth === 0) {
+          if (cur.trim()) result.push(cur.trim());
+          cur = '';
+        } else {
+          cur += ch;
+        }
+      }
       if (cur.trim()) result.push(cur.trim());
-      cur = '';
-    } else {
-      cur += ch;
+      return result;
     }
-  }
-  if (cur.trim()) result.push(cur.trim());
-  return result;
-}
 
-/* ═══════════════════════════════════════════════════════════
-   NUTRITION PARSER
-═══════════════════════════════════════════════════════════ */
-function parseNutrition(text) {
-  if (!text) return { rows: [], per: '' };
-  const perMatch = text.match(/\(per\s+[^)]+\)/i);
-  const per  = perMatch ? perMatch[0] : '';
-  const body = text.replace(per, '').trim().replace(/,\s*$/, '');
-  const rows = body.split(',').map(item => {
-    const colon = item.indexOf(':');
-    if (colon === -1) return null;
-    return { key: item.slice(0, colon).trim(), val: item.slice(colon + 1).trim() };
-  }).filter(Boolean);
-  return { rows, per };
-}
+    /* ═══════════════════════════════════════════════════════════
+       NUTRITION PARSER
+    ═══════════════════════════════════════════════════════════ */
+    function parseNutrition(text) {
+      if (!text) return { rows: [], per: '' };
+      const perMatch = text.match(/\(per\s+[^)]+\)/i);
+      const per = perMatch ? perMatch[0] : '';
+      const body = text.replace(per, '').trim().replace(/,\s*$/, '');
+      const rows = body.split(',').map(item => {
+        const colon = item.indexOf(':');
+        if (colon === -1) return null;
+        return { key: item.slice(0, colon).trim(), val: item.slice(colon + 1).trim() };
+      }).filter(Boolean);
+      return { rows, per };
+    }
 
-/* ═══════════════════════════════════════════════════════════
-   SHUFFLE (Fisher–Yates)
-═══════════════════════════════════════════════════════════ */
-function shuffle(arr) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
+    /* ═══════════════════════════════════════════════════════════
+       SHUFFLE (Fisher–Yates)
+    ═══════════════════════════════════════════════════════════ */
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
 
-/* ═══════════════════════════════════════════════════════════
-   BUILD INVESTIGATE SCREEN
-═══════════════════════════════════════════════════════════ */
-function buildInvestigate() {
-  const c = S.today;
+    /* ═══════════════════════════════════════════════════════════
+       BUILD INVESTIGATE SCREEN
+    ═══════════════════════════════════════════════════════════ */
+    function buildInvestigate() {
+      const c = S.today;
 
-  // Reset state
-  S.claimIdx  = 0;
-  S.answers   = [];
-  S.score     = 0;
-  S.answered  = false;
-  S.activeTab = 'front';
+      // Reset state
+      S.claimIdx = 0;
+      S.answers = [];
+      S.score = 0;
+      S.answered = false;
+      S.activeTab = 'front';
 
-  // Parse & shuffle claims
-  const raw = [];
-  for (let i = 1; i <= 5; i++) {
-    const text = (c[`claim_${i}_text`]   || '').trim();
-    const ans  = (c[`claim_${i}_answer`] || '').trim().toUpperCase() === 'TRUE';
-    const hint = (c[`claim_${i}_hint`]   || '').trim();
-    if (text) raw.push({ text, ans, hint });
-  }
-  S.claims = shuffle(raw);
+      // Parse & shuffle claims
+      const raw = [];
+      for (let i = 1; i <= 5; i++) {
+        const text = (c[`claim_${i}_text`] || '').trim();
+        const ans = (c[`claim_${i}_answer`] || '').trim().toUpperCase() === 'TRUE';
+        const hint = (c[`claim_${i}_hint`] || '').trim();
+        if (text) raw.push({ text, ans, hint });
+      }
+      S.claims = shuffle(raw);
 
-  // Header
-  document.getElementById('inv-num').textContent   = `Case #${String(c['#']).padStart(2, '0')}`;
-  document.getElementById('inv-title').textContent = c.product_name || 'Unknown Product';
+      // Header
+      document.getElementById('inv-num').textContent = `Case #${String(c['#']).padStart(2, '0')}`;
+      document.getElementById('inv-title').textContent = c.product_name || 'Unknown Product';
 
-  // Progress dots — reset
-  document.querySelectorAll('.pdot').forEach((d, i) => {
-    d.className = 'pdot' + (i === 0 ? ' active' : '');
-  });
-
-  // Product image
-  const imgWrap = document.getElementById('img-wrap');
-  const img     = document.getElementById('product-img');
-  if (c.generated_photo_link) {
-    img.src = c.generated_photo_link;
-    img.style.display = '';
-    img.onerror = () => {
-      img.style.display = 'none';
-      imgWrap.innerHTML = '<div class="img-no-img">🍱</div>';
-    };
-  } else {
-    img.style.display = 'none';
-    imgWrap.innerHTML = '<div class="img-no-img">🍱</div>';
-  }
-
-  // Front claim
-  document.getElementById('front-claim-text').textContent = c.front_claims || '—';
-
-  // Ingredients
-  const ingList = document.getElementById('ing-list');
-  ingList.innerHTML = '';
-  const ings = parseIngredients(c.ingredients_text);
-  if (ings.length) {
-    ings.forEach((ing, i) => {
-      const d = document.createElement('div');
-      d.className = 'ing-pill' + (i < 3 ? ' top' : '');
-      d.textContent = ing;
-      ingList.appendChild(d);
-    });
-  } else {
-    ingList.innerHTML = '<p style="color:var(--muted);font-size:14px;font-weight:600;">Ingredients not available.</p>';
-  }
-
-  // Nutrition
-  const nutTable = document.getElementById('nut-table');
-  const nutPer   = document.getElementById('nut-per');
-  nutTable.innerHTML = '';
-  nutPer.textContent  = '';
-  const { rows, per } = parseNutrition(c.nutrition_table_text);
-  if (rows.length) {
-    rows.forEach(({ key, val }) => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td>${key}</td><td>${val}</td>`;
-      nutTable.appendChild(tr);
-    });
-    nutPer.textContent = per;
-  } else {
-    nutTable.innerHTML = '<tr><td colspan="2" style="color:var(--muted);font-size:14px;font-weight:600;">Nutrition data not available.</td></tr>';
-  }
-
-  // Tab
-  setTab('front');
-
-  // Swipe
-  initSwipe();
-
-  // First claim
-  renderClaim(0);
-}
-
-/* ═══════════════════════════════════════════════════════════
-   TAB SWITCHING
-═══════════════════════════════════════════════════════════ */
-function setTab(name) {
-  S.activeTab = name;
-  document.querySelectorAll('.tab-btn').forEach(b => {
-    b.classList.toggle('on', b.dataset.tab === name);
-  });
-  document.querySelectorAll('.tab-panel').forEach(p => {
-    p.classList.toggle('on', p.id === 'tp-' + name);
-  });
-}
-
-/* ═══════════════════════════════════════════════════════════
-   SWIPE (touch events on product card)
-═══════════════════════════════════════════════════════════ */
-function initSwipe() {
-  const card = document.getElementById('product-card');
-  let sx = 0;
-  // Remove old listeners by cloning
-  const fresh = card.cloneNode(true);
-  card.parentNode.replaceChild(fresh, card);
-  // Re-attach tab button listeners
-  fresh.querySelectorAll('.tab-btn').forEach(b => {
-    b.addEventListener('click', () => setTab(b.dataset.tab));
-  });
-  fresh.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, { passive: true });
-  fresh.addEventListener('touchend',   e => {
-    const dx = sx - e.changedTouches[0].clientX;
-    if (Math.abs(dx) < 50) return;
-    const tabs = ['front', 'ingredients', 'nutrition'];
-    const idx  = tabs.indexOf(S.activeTab);
-    if (dx > 0 && idx < 2) setTab(tabs[idx + 1]);
-    if (dx < 0 && idx > 0) setTab(tabs[idx - 1]);
-  }, { passive: true });
-  // Also re-attach lightbox trigger
-  const iw = fresh.querySelector('.img-wrap');
-  if (iw) iw.addEventListener('click', openLightbox);
-}
-
-/* ═══════════════════════════════════════════════════════════
-   CLAIM RENDERING
-═══════════════════════════════════════════════════════════ */
-function renderClaim(idx) {
-  S.claimIdx  = idx;
-  S.answered  = false;
-
-  const claim = S.claims[idx];
-  document.getElementById('claim-counter').textContent = `Claim ${idx + 1} of 5`;
-  document.getElementById('claim-text').textContent    = claim.text;
-
-  // Reset feedback
-  const fb = document.getElementById('feedback-box');
-  fb.className = 'feedback-box';
-  document.getElementById('btn-next').className = 'btn-next';
-
-  // Reset answer buttons
-  const btnT = document.getElementById('btn-true');
-  const btnF = document.getElementById('btn-false');
-  btnT.className = 'btn-true';
-  btnF.className = 'btn-false';
-  btnT.disabled  = false;
-  btnF.disabled  = false;
-}
-
-/* ═══════════════════════════════════════════════════════════
-   ANSWER
-═══════════════════════════════════════════════════════════ */
-function answer(userAns) {
-  if (S.answered) return;
-  S.answered = true;
-
-  const claim   = S.claims[S.claimIdx];
-  const correct = (userAns === claim.ans);
-  if (correct) S.score++;
-
-  S.answers.push({ text: claim.text, correct, hint: claim.hint });
-
-  // Lock buttons & highlight chosen
-  const btnT = document.getElementById('btn-true');
-  const btnF = document.getElementById('btn-false');
-  btnT.disabled = true;
-  btnF.disabled = true;
-  if (userAns === true)  btnT.classList.add('chosen');
-  if (userAns === false) btnF.classList.add('chosen');
-
-  // Progress dot
-  const dot = document.querySelector(`.pdot[data-i="${S.claimIdx}"]`);
-  if (dot) {
-    dot.classList.remove('active');
-    dot.classList.add(correct ? 'correct' : 'wrong');
-  }
-  // Pre-activate next dot
-  if (S.claimIdx < 4) {
-    const nd = document.querySelector(`.pdot[data-i="${S.claimIdx + 1}"]`);
-    if (nd) nd.classList.add('active');
-  }
-
-  // Feedback
-  const fb = document.getElementById('feedback-box');
-  document.getElementById('fb-emoji').textContent = correct ? '✅' : '❌';
-  document.getElementById('fb-text').innerHTML =
-    `<strong>${correct ? 'Correct!' : 'Not quite.'}</strong><br>${claim.hint}`;
-  fb.className = 'feedback-box show ' + (correct ? 'ok' : 'bad');
-
-  // Shake on wrong
-  if (!correct) {
-    const cc = document.getElementById('claim-card');
-    cc.classList.add('shake');
-    setTimeout(() => cc.classList.remove('shake'), 400);
-  }
-
-  // Next button
-  const btnN = document.getElementById('btn-next');
-  btnN.textContent = (S.claimIdx < 4) ? 'Next Claim →' : 'See Results 🏆';
-  btnN.className   = 'btn-next show';
-}
-
-/* ═══════════════════════════════════════════════════════════
-   NEXT CLAIM
-═══════════════════════════════════════════════════════════ */
-function nextClaim() {
-  if (S.claimIdx >= S.claims.length - 1) {
-    showResults();
-  } else {
-    renderClaim(S.claimIdx + 1);
-    document.getElementById('claim-card').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }
-}
-
-/* ═══════════════════════════════════════════════════════════
-   RESULTS
-═══════════════════════════════════════════════════════════ */
-function showResults() {
-  const sc = S.score;
-  document.getElementById('res-score').textContent = `${sc}/5`;
-  document.getElementById('res-title').textContent = TITLES[sc];
-  document.getElementById('res-copy').textContent  = COPY[sc];
-
-  // Case notes
-  document.getElementById('notes-body').textContent =
-    (S.today && S.today.case_notes) ? S.today.case_notes : 'No notes available for this case.';
-
-  // Review
-  const list = document.getElementById('review-list');
-  list.innerHTML = '';
-  S.answers.forEach(a => {
-    const div = document.createElement('div');
-    div.className = 'review-item';
-    div.innerHTML = `<div class="review-icon">${a.correct ? '✅' : '❌'}</div>
-                     <div class="review-text">${a.text}</div>`;
-    list.appendChild(div);
-  });
-
-  goTo('results');
-
-  // Save to Sheets (fire-and-forget)
-  saveToSheets({
-    timestamp:    new Date().toISOString(),
-    name:         S.user.name,
-    age:          S.user.age,
-    case_id:      S.today['#'],
-    product_name: S.today.product_name,
-    date:         activeDateIST(),
-    score:        sc,
-    title:        TITLES[sc],
-  });
-}
-
-function playAgain() {
-  // Keep name/age pre-filled; let player replay
-  goTo('register');
-}
-
-/* ═══════════════════════════════════════════════════════════
-   GOOGLE SHEETS SAVE
-═══════════════════════════════════════════════════════════ */
-async function saveToSheets(data) {
-  if (!CFG.SHEETS_WEBHOOK || CFG.SHEETS_WEBHOOK === 'YOUR_APPS_SCRIPT_URL') {
-    console.log('[Sheets] Webhook not configured. Would have saved:', data);
-    return;
-  }
-  try {
-    await fetch(CFG.SHEETS_WEBHOOK + '?' + new URLSearchParams(data).toString(), {
-      method: 'GET',
-      mode:   'no-cors',
-    });
-  } catch (e) {
-    console.warn('[Sheets] Save failed (game unaffected):', e);
-  }
-}
-
-/* ═══════════════════════════════════════════════════════════
-   SHARE — text share (works on WhatsApp, iMessage, etc.)
-   Canvas image is generated and offered as a save/download.
-═══════════════════════════════════════════════════════════ */
-async function shareScore() {
-  const sc    = S.score;
-  const title = TITLES[sc];
-  const c     = S.today;
-
-  const shareText = `🔍 FBI Case Files\n\nI scored ${sc}/5 as ${title}!\nToday's case: ${c.product_name}\n\nCan you beat me? Play here 👇\n${CFG.GAME_URL}`;
-
-  // Native share sheet — opens WhatsApp, iMessage, etc. cleanly (text only, no file)
-  if (navigator.share) {
-    try {
-      await navigator.share({
-        title: `FBI Case Files — ${title}`,
-        text:  shareText,
+      // Progress dots — reset
+      document.querySelectorAll('.pdot').forEach((d, i) => {
+        d.className = 'pdot' + (i === 0 ? ' active' : '');
       });
-      // After sharing, offer the score card image for saving
-      setTimeout(() => generateAndOfferImage(sc, title, c), 600);
-      return;
-    } catch (e) {
-      if (e.name === 'AbortError') return; // user cancelled — do nothing
-    }
-  }
 
-  // Desktop fallback: copy text + download image
-  try { await navigator.clipboard.writeText(shareText); }
-  catch { /* clipboard blocked */ }
-  generateAndOfferImage(sc, title, c);
-}
-
-/** Draws the score card onto canvas and triggers a download / save. */
-async function generateAndOfferImage(sc, title, c) {
-  const canvas = document.getElementById('share-canvas');
-  const SIZE   = 1080;
-  canvas.width  = SIZE;
-  canvas.height = SIZE;
-  const ctx = canvas.getContext('2d');
-
-  // 1. Background: try product image, fall back to teal gradient
-  let painted = false;
-  if (c.generated_photo_link) {
-    try {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      await new Promise((res, rej) => {
-        img.onload = res; img.onerror = rej;
+      // Product image
+      const imgWrap = document.getElementById('img-wrap');
+      const img = document.getElementById('product-img');
+      if (c.generated_photo_link) {
         img.src = c.generated_photo_link;
-        setTimeout(rej, 6000);
+        img.style.display = '';
+        img.onerror = () => {
+          img.style.display = 'none';
+          imgWrap.innerHTML = '<div class="img-no-img">🍱</div>';
+        };
+      } else {
+        img.style.display = 'none';
+        imgWrap.innerHTML = '<div class="img-no-img">🍱</div>';
+      }
+
+      // Front claim
+      document.getElementById('front-claim-text').textContent = c.front_claims || '—';
+
+      // Ingredients
+      const ingList = document.getElementById('ing-list');
+      ingList.innerHTML = '';
+      const ings = parseIngredients(c.ingredients_text);
+      if (ings.length) {
+        ings.forEach((ing, i) => {
+          const d = document.createElement('div');
+          d.className = 'ing-pill' + (i < 3 ? ' top' : '');
+          d.textContent = ing;
+          ingList.appendChild(d);
+        });
+      } else {
+        ingList.innerHTML = '<p style="color:var(--muted);font-size:14px;font-weight:600;">Ingredients not available.</p>';
+      }
+
+      // Nutrition
+      const nutTable = document.getElementById('nut-table');
+      const nutPer = document.getElementById('nut-per');
+      nutTable.innerHTML = '';
+      nutPer.textContent = '';
+      const { rows, per } = parseNutrition(c.nutrition_table_text);
+      if (rows.length) {
+        rows.forEach(({ key, val }) => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td>${key}</td><td>${val}</td>`;
+          nutTable.appendChild(tr);
+        });
+        nutPer.textContent = per;
+      } else {
+        nutTable.innerHTML = '<tr><td colspan="2" style="color:var(--muted);font-size:14px;font-weight:600;">Nutrition data not available.</td></tr>';
+      }
+
+      // Tab
+      setTab('front');
+
+      // Swipe
+      initSwipe();
+
+      // First claim
+      renderClaim(0);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       TAB SWITCHING
+    ═══════════════════════════════════════════════════════════ */
+    function setTab(name) {
+      S.activeTab = name;
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.toggle('on', b.dataset.tab === name);
       });
-      const ar = img.naturalWidth / img.naturalHeight;
-      let sw, sh, sx, sy;
-      if (ar >= 1) { sh = img.naturalHeight; sw = sh; sx = (img.naturalWidth - sw) / 2; sy = 0; }
-      else          { sw = img.naturalWidth;  sh = sw; sx = 0; sy = (img.naturalHeight - sh) / 2; }
-      ctx.drawImage(img, sx, sy, sw, sh, 0, 0, SIZE, SIZE);
-      painted = true;
-    } catch { /* fall through */ }
-  }
-  if (!painted) {
-    const g = ctx.createLinearGradient(0, 0, SIZE, SIZE);
-    g.addColorStop(0, '#0F766E'); g.addColorStop(1, '#0A5954');
-    ctx.fillStyle = g; ctx.fillRect(0, 0, SIZE, SIZE);
-  }
+      document.querySelectorAll('.tab-panel').forEach(p => {
+        p.classList.toggle('on', p.id === 'tp-' + name);
+      });
+    }
 
-  // 2. Dark overlay
-  const ov = ctx.createLinearGradient(0, SIZE * 0.35, 0, SIZE);
-  ov.addColorStop(0, 'rgba(10,20,40,0)');
-  ov.addColorStop(0.45, 'rgba(10,20,40,0.75)');
-  ov.addColorStop(1, 'rgba(10,20,40,0.95)');
-  ctx.fillStyle = ov; ctx.fillRect(0, 0, SIZE, SIZE);
+    /* ═══════════════════════════════════════════════════════════
+       SWIPE (touch events on product card)
+    ═══════════════════════════════════════════════════════════ */
+    function initSwipe() {
+      const card = document.getElementById('product-card');
+      let sx = 0;
+      // Remove old listeners by cloning
+      const fresh = card.cloneNode(true);
+      card.parentNode.replaceChild(fresh, card);
+      // Re-attach tab button listeners
+      fresh.querySelectorAll('.tab-btn').forEach(b => {
+        b.addEventListener('click', () => setTab(b.dataset.tab));
+      });
+      fresh.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, { passive: true });
+      fresh.addEventListener('touchend', e => {
+        const dx = sx - e.changedTouches[0].clientX;
+        if (Math.abs(dx) < 50) return;
+        const tabs = ['front', 'ingredients', 'nutrition'];
+        const idx = tabs.indexOf(S.activeTab);
+        if (dx > 0 && idx < 2) setTab(tabs[idx + 1]);
+        if (dx < 0 && idx > 0) setTab(tabs[idx - 1]);
+      }, { passive: true });
+      // Also re-attach lightbox trigger
+      const iw = fresh.querySelector('.img-wrap');
+      if (iw) iw.addEventListener('click', openLightbox);
+    }
 
-  // 3. Text
-  ctx.textBaseline = 'alphabetic';
-  ctx.fillStyle = '#F59E0B';
-  ctx.font = `bold 38px sans-serif`;
-  ctx.fillText('🔍  FBI Case Files', 64, SIZE * 0.60);
+    /* ═══════════════════════════════════════════════════════════
+       CLAIM RENDERING
+    ═══════════════════════════════════════════════════════════ */
+    function renderClaim(idx) {
+      S.claimIdx = idx;
+      S.answered = false;
 
-  ctx.fillStyle = '#F59E0B';
-  ctx.font = `bold 128px sans-serif`;
-  ctx.fillText(`${sc}/5`, 64, SIZE * 0.73);
+      const claim = S.claims[idx];
+      document.getElementById('claim-counter').textContent = `Claim ${idx + 1} of 5`;
+      document.getElementById('claim-text').textContent = claim.text;
 
-  ctx.fillStyle = '#ffffff';
-  ctx.font = `bold 58px sans-serif`;
-  ctx.fillText(title, 64, SIZE * 0.80);
+      // Reset feedback
+      const fb = document.getElementById('feedback-box');
+      fb.className = 'feedback-box';
+      document.getElementById('btn-next').className = 'btn-next';
 
-  const prodText = `Investigated: ${c.product_name}`;
-  ctx.fillStyle = 'rgba(255,255,255,0.75)';
-  ctx.font = `600 34px sans-serif`;
-  ctx.fillText(prodText.length > 44 ? prodText.slice(0, 43) + '…' : prodText, 64, SIZE * 0.87);
+      // Restore answer buttons (hidden after each answer)
+      document.getElementById('answer-btns').style.display = 'grid';
+      const btnT = document.getElementById('btn-true');
+      const btnF = document.getElementById('btn-false');
+      btnT.className = 'btn-true';
+      btnF.className = 'btn-false';
+      btnT.disabled = false;
+      btnF.disabled = false;
+    }
 
-  ctx.fillStyle = 'rgba(255,255,255,0.65)';
-  ctx.font = `600 30px sans-serif`;
-  ctx.fillText(`Agent: ${S.user.name}`, 64, SIZE * 0.92);
+    /* ═══════════════════════════════════════════════════════════
+       ANSWER
+    ═══════════════════════════════════════════════════════════ */
+    function answer(userAns) {
+      if (S.answered) return;
+      S.answered = true;
 
-  ctx.fillStyle = '#F59E0B';
-  ctx.font = `bold 28px sans-serif`;
-  ctx.fillText(CFG.GAME_URL, 64, SIZE * 0.97);
+      const claim = S.claims[S.claimIdx];
+      const correct = (userAns === claim.ans);
+      if (correct) S.score++;
 
-  // 4. Download / save
-  canvas.toBlob(blob => {
-    const url = URL.createObjectURL(blob);
-    const a   = document.createElement('a');
-    a.href = url; a.download = 'fbi-score-card.png';
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(url), 5000);
-  }, 'image/png');
-}
+      S.answers.push({ text: claim.text, correct, hint: claim.hint });
 
-/* ═══════════════════════════════════════════════════════════
-   LIGHTBOX
-═══════════════════════════════════════════════════════════ */
-function openLightbox() {
-  const src = document.getElementById('product-img').src;
-  if (!src) return;
-  document.getElementById('lb-img').src = src;
-  document.getElementById('lightbox').classList.add('open');
-}
-function closeLightbox() {
-  document.getElementById('lightbox').classList.remove('open');
-}
+      // Lock buttons & highlight chosen, then hide them so feedback appears in same space
+      const btnT = document.getElementById('btn-true');
+      const btnF = document.getElementById('btn-false');
+      btnT.disabled = true;
+      btnF.disabled = true;
+      if (userAns === true) btnT.classList.add('chosen');
+      if (userAns === false) btnF.classList.add('chosen');
+      // Hide buttons after brief flash so feedback doesn't push page down
+      setTimeout(() => {
+        document.getElementById('answer-btns').style.display = 'none';
+      }, 180);
 
-/* ═══════════════════════════════════════════════════════════
-   MODALS
-═══════════════════════════════════════════════════════════ */
-function openModal(id)  { document.getElementById(id).classList.add('open'); }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-function backdropClose(e, id) { if (e.target === document.getElementById(id)) closeModal(id); }
+      // Progress dot
+      const dot = document.querySelector(`.pdot[data-i="${S.claimIdx}"]`);
+      if (dot) {
+        dot.classList.remove('active');
+        dot.classList.add(correct ? 'correct' : 'wrong');
+      }
+      // Pre-activate next dot
+      if (S.claimIdx < 4) {
+        const nd = document.querySelector(`.pdot[data-i="${S.claimIdx + 1}"]`);
+        if (nd) nd.classList.add('active');
+      }
 
-/* ═══════════════════════════════════════════════════════════
-   KEYBOARD — close lightbox / modals on Escape
-═══════════════════════════════════════════════════════════ */
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
-    closeLightbox();
-    document.querySelectorAll('.modal-wrap.open').forEach(m => m.classList.remove('open'));
-  }
-});
+      // Feedback
+      const fb = document.getElementById('feedback-box');
+      document.getElementById('fb-emoji').textContent = correct ? '✅' : '❌';
+      document.getElementById('fb-text').innerHTML =
+        `<strong>${correct ? 'Correct!' : 'Not quite.'}</strong><br>${claim.hint}`;
+      fb.className = 'feedback-box show ' + (correct ? 'ok' : 'bad');
 
-/* ═══════════════════════════════════════════════════════════
-   KICK OFF
-═══════════════════════════════════════════════════════════ */
-init();
-</script>
+      // Shake on wrong
+      if (!correct) {
+        const cc = document.getElementById('claim-card');
+        cc.classList.add('shake');
+        setTimeout(() => cc.classList.remove('shake'), 400);
+      }
+
+      // Next button
+      const btnN = document.getElementById('btn-next');
+      btnN.textContent = (S.claimIdx < 4) ? 'Next Claim →' : 'See Results 🏆';
+      btnN.className = 'btn-next show';
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       NEXT CLAIM
+    ═══════════════════════════════════════════════════════════ */
+    function nextClaim() {
+      if (S.claimIdx >= S.claims.length - 1) {
+        showResults();
+      } else {
+        renderClaim(S.claimIdx + 1);
+        document.getElementById('claim-card').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       RESULTS
+    ═══════════════════════════════════════════════════════════ */
+    function showResults() {
+      const sc = S.score;
+      document.getElementById('res-score').textContent = `${sc}/5`;
+      document.getElementById('res-title').textContent = TITLES[sc];
+      document.getElementById('res-copy').textContent = COPY[sc];
+
+      // Case notes — verdict + universal learning rule
+      const caseNote = (S.today && S.today.case_notes) ? S.today.case_notes : '';
+      document.getElementById('notes-body').innerHTML =
+        `<p><strong>🔍 Case verdict:</strong><br>${caseNote || 'No notes for this case.'}</p>
+         <p style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);font-size:13px;color:var(--muted);line-height:1.75;">
+           🧠 <strong>Rule to remember:</strong> Ingredients are always listed from most to least — whatever is first is what the product is mostly made of. Front-of-pack claims are chosen by the brand's marketing team. They only show you what helps sell the product. The back label tells the real story.
+         </p>`;
+
+      // Review
+      const list = document.getElementById('review-list');
+      list.innerHTML = '';
+      S.answers.forEach(a => {
+        const div = document.createElement('div');
+        div.className = 'review-item';
+        div.innerHTML = `<div class="review-icon">${a.correct ? '✅' : '❌'}</div>
+                     <div class="review-text">${a.text}</div>`;
+        list.appendChild(div);
+      });
+
+      goTo('results');
+
+      // Save to Sheets (fire-and-forget)
+      saveToSheets({
+        timestamp: new Date().toISOString(),
+        name: S.user.name,
+        age: S.user.age,
+        case_id: S.today['#'],
+        product_name: S.today.product_name,
+        date: activeDateIST(),
+        score: sc,
+        title: TITLES[sc],
+      });
+    }
+
+    function playAgain() {
+      // Keep name/age pre-filled; let player replay
+      goTo('register');
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       GOOGLE SHEETS SAVE
+    ═══════════════════════════════════════════════════════════ */
+    async function saveToSheets(data) {
+      // ── LOCAL COUNTER (works without any setup) ──────────────
+      // Each completed game increments fbi_plays in localStorage.
+      // To view: open browser → DevTools (F12) → Application →
+      //   Local Storage → site URL → look for fbi_plays & fbi_log
+      try {
+        const count = parseInt(localStorage.getItem('fbi_plays') || '0', 10) + 1;
+        localStorage.setItem('fbi_plays', count);
+        const log = JSON.parse(localStorage.getItem('fbi_log') || '[]');
+        log.push({ name: data.name, age: data.age, score: data.score, date: data.date });
+        localStorage.setItem('fbi_log', JSON.stringify(log.slice(-200))); // keep last 200
+        console.log(`[FBI] Plays on this device: ${count} | Latest: ${data.name}, age ${data.age}, score ${data.score}/5`);
+      } catch (_) { /* storage blocked — game continues fine */ }
+
+      // ── GOOGLE SHEETS (paste your Apps Script URL in CFG) ────
+      if (!CFG.SHEETS_WEBHOOK || CFG.SHEETS_WEBHOOK === 'YOUR_APPS_SCRIPT_URL') {
+        console.log('[Sheets] Webhook not configured. Would have saved:', data);
+        return;
+      }
+      try {
+        await fetch(CFG.SHEETS_WEBHOOK + '?' + new URLSearchParams(data).toString(), {
+          method: 'GET',
+          mode: 'no-cors',
+        });
+      } catch (e) {
+        console.warn('[Sheets] Save failed (game unaffected):', e);
+      }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       SHARE — text share (works on WhatsApp, iMessage, etc.)
+       Canvas image is generated and offered as a save/download.
+    ═══════════════════════════════════════════════════════════ */
+    async function shareScore() {
+      const sc = S.score;
+      const title = TITLES[sc];
+      const c = S.today;
+
+      const shareText = `🔍 FBI Case Files\n\nI scored ${sc}/5 as ${title}!\nToday's case: ${c.product_name}\n\nCan you beat me? Play here 👇\n${CFG.GAME_URL}`;
+
+      // Native share sheet — opens WhatsApp, iMessage, etc. cleanly (text only, no file)
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: `FBI Case Files — ${title}`,
+            text: shareText,
+          });
+          // After sharing, offer the score card image for saving
+          setTimeout(() => generateAndOfferImage(sc, title, c), 600);
+          return;
+        } catch (e) {
+          if (e.name === 'AbortError') return; // user cancelled — do nothing
+        }
+      }
+
+      // Desktop fallback: copy text + download image
+      try { await navigator.clipboard.writeText(shareText); }
+      catch { /* clipboard blocked */ }
+      generateAndOfferImage(sc, title, c);
+    }
+
+    /** Draws the score card onto canvas and triggers a download / save. */
+    async function generateAndOfferImage(sc, title, c) {
+      const canvas = document.getElementById('share-canvas');
+      const SIZE = 1080;
+      canvas.width = SIZE;
+      canvas.height = SIZE;
+      const ctx = canvas.getContext('2d');
+
+      // 1. Background: try product image, fall back to teal gradient
+      let painted = false;
+      if (c.generated_photo_link) {
+        try {
+          const img = new Image();
+          img.crossOrigin = 'anonymous';
+          await new Promise((res, rej) => {
+            img.onload = res; img.onerror = rej;
+            img.src = c.generated_photo_link;
+            setTimeout(rej, 6000);
+          });
+          const ar = img.naturalWidth / img.naturalHeight;
+          let sw, sh, sx, sy;
+          if (ar >= 1) { sh = img.naturalHeight; sw = sh; sx = (img.naturalWidth - sw) / 2; sy = 0; }
+          else { sw = img.naturalWidth; sh = sw; sx = 0; sy = (img.naturalHeight - sh) / 2; }
+          ctx.drawImage(img, sx, sy, sw, sh, 0, 0, SIZE, SIZE);
+          painted = true;
+        } catch { /* fall through */ }
+      }
+      if (!painted) {
+        const g = ctx.createLinearGradient(0, 0, SIZE, SIZE);
+        g.addColorStop(0, '#0F766E'); g.addColorStop(1, '#0A5954');
+        ctx.fillStyle = g; ctx.fillRect(0, 0, SIZE, SIZE);
+      }
+
+      // 2. Dark overlay
+      const ov = ctx.createLinearGradient(0, SIZE * 0.35, 0, SIZE);
+      ov.addColorStop(0, 'rgba(10,20,40,0)');
+      ov.addColorStop(0.45, 'rgba(10,20,40,0.75)');
+      ov.addColorStop(1, 'rgba(10,20,40,0.95)');
+      ctx.fillStyle = ov; ctx.fillRect(0, 0, SIZE, SIZE);
+
+      // 3. Text
+      ctx.textBaseline = 'alphabetic';
+      ctx.fillStyle = '#F59E0B';
+      ctx.font = `bold 38px sans-serif`;
+      ctx.fillText('🔍  FBI Case Files', 64, SIZE * 0.60);
+
+      ctx.fillStyle = '#F59E0B';
+      ctx.font = `bold 128px sans-serif`;
+      ctx.fillText(`${sc}/5`, 64, SIZE * 0.73);
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = `bold 58px sans-serif`;
+      ctx.fillText(title, 64, SIZE * 0.80);
+
+      const prodText = `Investigated: ${c.product_name}`;
+      ctx.fillStyle = 'rgba(255,255,255,0.75)';
+      ctx.font = `600 34px sans-serif`;
+      ctx.fillText(prodText.length > 44 ? prodText.slice(0, 43) + '…' : prodText, 64, SIZE * 0.87);
+
+      ctx.fillStyle = 'rgba(255,255,255,0.65)';
+      ctx.font = `600 30px sans-serif`;
+      ctx.fillText(`Agent: ${S.user.name}`, 64, SIZE * 0.92);
+
+      ctx.fillStyle = '#F59E0B';
+      ctx.font = `bold 28px sans-serif`;
+      ctx.fillText(CFG.GAME_URL, 64, SIZE * 0.97);
+
+      // 4. Download / save
+      canvas.toBlob(blob => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'fbi-score-card.png';
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 5000);
+      }, 'image/png');
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       LIGHTBOX
+    ═══════════════════════════════════════════════════════════ */
+    function openLightbox() {
+      const src = document.getElementById('product-img').src;
+      if (!src) return;
+      document.getElementById('lb-img').src = src;
+      document.getElementById('lightbox').classList.add('open');
+    }
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       MODALS
+    ═══════════════════════════════════════════════════════════ */
+    function openModal(id) { document.getElementById(id).classList.add('open'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+    function backdropClose(e, id) { if (e.target === document.getElementById(id)) closeModal(id); }
+
+    /* ═══════════════════════════════════════════════════════════
+       KEYBOARD — close lightbox / modals on Escape
+    ═══════════════════════════════════════════════════════════ */
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        closeLightbox();
+        document.querySelectorAll('.modal-wrap.open').forEach(m => m.classList.remove('open'));
+      }
+    });
+
+    /* ═══════════════════════════════════════════════════════════
+       KICK OFF
+    ═══════════════════════════════════════════════════════════ */
+    init();
+  </script>
 </body>
+
 </html>
