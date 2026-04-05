@@ -301,6 +301,151 @@
       color: var(--teal);
     }
 
+    /* ─── HOME TAGLINE ──────────────────────────────────────── */
+    .home-tagline {
+      background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dk) 100%);
+      border-radius: var(--r);
+      padding: 24px 22px;
+      color: #fff;
+      font-size: 20px;
+      font-weight: 800;
+      line-height: 1.4;
+    }
+
+    .home-tagline em {
+      color: var(--mango);
+      font-style: normal;
+    }
+
+    /* ─── RULES SCREEN ──────────────────────────────────────── */
+    .rules-header {
+      text-align: center;
+      padding-top: 8px;
+    }
+
+    .rules-title {
+      font-size: 26px;
+      font-weight: 900;
+    }
+
+    .rules-sub {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    .rules-steps-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .rules-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      background: var(--card);
+      border-radius: 16px;
+      padding: 14px 16px;
+      box-shadow: var(--sh);
+    }
+
+    .rules-step-num {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--teal);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .rules-step-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 3px;
+    }
+
+    .rules-step-desc {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .rules-cats-label {
+      font-size: 12px;
+      font-weight: 900;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .rules-cats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+    }
+
+    .cat-card {
+      border-radius: 14px;
+      padding: 12px 8px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      position: relative;
+    }
+
+    .cat-active {
+      background: var(--teal);
+    }
+
+    .cat-soon {
+      background: #F1F5F9;
+    }
+
+    .cat-icon {
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .cat-name {
+      font-size: 11px;
+      font-weight: 800;
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    .cat-active .cat-name {
+      color: #fff;
+    }
+
+    .cat-soon .cat-name {
+      color: var(--muted);
+    }
+
+    .cat-soon-badge {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: var(--border);
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 900;
+      padding: 2px 5px;
+      border-radius: 100px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
     /* ─── TODAY CARD IMAGE ──────────────────────────────────── */
     .today-card-inner {
       display: flex;
@@ -1187,40 +1332,11 @@
         <div class="logo-sub">Food &amp; Beverage Investigator</div>
       </div>
 
-      <div class="hero">
-        <div class="hero-title">Every pack tells a story.<br>Are you brave enough to find the <em>full</em> truth?</div>
-        <div class="hero-steps">
-          <div class="hero-step">
-            <span class="hero-step-num">1</span>
-            <span class="hero-step-txt">Open today's case</span>
-          </div>
-          <div class="hero-step">
-            <span class="hero-step-num">2</span>
-            <span class="hero-step-txt">Study the front, ingredients &amp; nutrition tabs</span>
-          </div>
-          <div class="hero-step">
-            <span class="hero-step-num">3</span>
-            <span class="hero-step-txt">Crack 5 claims — True or False?</span>
-          </div>
-          <div class="hero-step">
-            <span class="hero-step-num">4</span>
-            <span class="hero-step-txt">See your detective rank &amp; read the case notes</span>
-          </div>
-        </div>
+      <div class="home-tagline">
+        Every pack tells a story.<br>Are you brave enough to find the <em>full</em> truth?
       </div>
 
-      <div class="today-card">
-        <div class="today-card-inner">
-          <div style="flex:1;min-width:0;">
-            <div class="today-label">📁 Today's Case</div>
-            <div id="today-name" class="today-name">Loading…</div>
-            <div id="today-brand" class="today-brand"></div>
-          </div>
-          <img id="today-img" class="today-img" src="" alt="Today's case" />
-        </div>
-      </div>
-
-      <button id="btn-start-home" class="btn btn-primary" onclick="goToRegister()">🕵️ Open Today's Case</button>
+      <button id="btn-start-home" class="btn btn-primary" onclick="goToRules()">🕵️ Open Today's Case</button>
 
       <div class="timer-line">Next case drops in <b id="home-timer">--:--:--</b></div>
 
@@ -1229,6 +1345,69 @@
         <span>By <a href="https://www.linkedin.com/in/yajur-lath-4ba192158/" target="_blank"
             rel="noopener"><strong>Yajur Lath</strong></a></span>
       </div>
+    </div>
+
+    <!-- ── RULES ──────────────────────────────────────────────────── -->
+    <div id="screen-rules" class="screen off">
+      <div class="rules-header">
+        <div class="rules-title">How it works</div>
+        <div class="rules-sub">5 minutes. One case. A skill for life.</div>
+      </div>
+
+      <div class="rules-steps-list">
+        <div class="rules-step">
+          <div class="rules-step-num">1</div>
+          <div class="rules-step-body">
+            <div class="rules-step-title">Open today's case</div>
+            <div class="rules-step-desc">A new packaged food or drink is assigned every day at 8 AM</div>
+          </div>
+        </div>
+        <div class="rules-step">
+          <div class="rules-step-num">2</div>
+          <div class="rules-step-body">
+            <div class="rules-step-title">Study the pack</div>
+            <div class="rules-step-desc">Read the Front, Ingredients, and Nutrition tabs — all the clues are there</div>
+          </div>
+        </div>
+        <div class="rules-step">
+          <div class="rules-step-num">3</div>
+          <div class="rules-step-body">
+            <div class="rules-step-title">Crack 5 claims</div>
+            <div class="rules-step-desc">The FBI gives you statements about the pack — you decide True or False</div>
+          </div>
+        </div>
+        <div class="rules-step">
+          <div class="rules-step-num">4</div>
+          <div class="rules-step-body">
+            <div class="rules-step-title">Earn your detective rank</div>
+            <div class="rules-step-desc">Score 5/5 to become Chief Detective. Read the case notes to learn more.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rules-cats-label">What you'll investigate</div>
+      <div class="rules-cats-grid">
+        <div class="cat-card cat-active"><span class="cat-icon">🧃</span><span class="cat-name">Fruit Drinks</span>
+        </div>
+        <div class="cat-card cat-active"><span class="cat-icon">🍪</span><span class="cat-name">Biscuits</span></div>
+        <div class="cat-card cat-active"><span class="cat-icon">🥣</span><span class="cat-name">Breakfast Cereals</span>
+        </div>
+        <div class="cat-card cat-soon"><span class="cat-icon">🍟</span><span class="cat-name">Chips &amp;
+            Snacks</span><span class="cat-soon-badge">Soon</span></div>
+        <div class="cat-card cat-soon"><span class="cat-icon">🍫</span><span class="cat-name">Snack Bars</span><span
+            class="cat-soon-badge">Soon</span></div>
+        <div class="cat-card cat-soon"><span class="cat-icon">🍞</span><span class="cat-name">Packaged
+            Breads</span><span class="cat-soon-badge">Soon</span></div>
+        <div class="cat-card cat-soon"><span class="cat-icon">🧒</span><span class="cat-name">Kids Snacks</span><span
+            class="cat-soon-badge">Soon</span></div>
+        <div class="cat-card cat-soon"><span class="cat-icon">🍜</span><span class="cat-name">Instant
+            Noodles</span><span class="cat-soon-badge">Soon</span></div>
+        <div class="cat-card cat-soon"><span class="cat-icon">🥛</span><span class="cat-name">Flavored Milk</span><span
+            class="cat-soon-badge">Soon</span></div>
+      </div>
+
+      <button class="btn btn-primary" onclick="goToRegister()">Got it — Open the Case 🗂️</button>
+      <button class="btn btn-ghost" onclick="goTo('home')">← Back</button>
     </div>
 
     <!-- ── REGISTER ──────────────────────────────────────────────── -->
@@ -1350,7 +1529,7 @@
       <div class="review-list" id="review-list"></div>
 
       <div class="actions">
-        <button class="btn btn-mango" onclick="shareScore()">📤 Share My Score</button>
+        <button class="btn btn-mango" id="btn-share-img" onclick="shareScore()">📸 Save My Score Card</button>
         <button class="btn btn-outline" onclick="openModal('modal-notes')">📋 Case Notes</button>
         <button class="btn btn-ghost" onclick="playAgain()">🔄 Play Again</button>
       </div>
@@ -1430,7 +1609,10 @@
     const CFG = {
       LAUNCH_DATE: '2026-04-01',          // Case #1 goes live on this IST date
       CSV_PATH: './data/cases.csv',
-      SHEETS_WEBHOOK: 'YOUR_APPS_SCRIPT_URL',// Paste your Google Apps Script URL here
+      // ── PLAYER TRACKING (Formspree — see SETUP.md for 3-step instructions) ──
+      // Go to formspree.io → create form → paste the endpoint URL below
+      // e.g. 'https://formspree.io/f/xyzabc123'
+      TRACKING_URL: 'https://formspree.io/f/xkopplpw',
       GAME_URL: 'https://foodandbeverageinvestigator.com', // Your live game URL (for share card)
     };
 
@@ -1586,7 +1768,8 @@
       const el = document.getElementById('screen-' + name);
       if (el) { el.classList.remove('off'); el.scrollTop = 0; }
     }
-    function goToRegister() { if (S.today) goTo('register'); }
+    function goToRules() { if (S.today) goTo('rules'); }
+    function goToRegister() { goTo('register'); }
 
     /* ═══════════════════════════════════════════════════════════
        REGISTER → GAME START
@@ -1938,31 +2121,26 @@
        GOOGLE SHEETS SAVE
     ═══════════════════════════════════════════════════════════ */
     async function saveToSheets(data) {
-      // ── LOCAL COUNTER (works without any setup) ──────────────
-      // Each completed game increments fbi_plays in localStorage.
-      // To view: open browser → DevTools (F12) → Application →
-      //   Local Storage → site URL → look for fbi_plays & fbi_log
-      try {
-        const count = parseInt(localStorage.getItem('fbi_plays') || '0', 10) + 1;
-        localStorage.setItem('fbi_plays', count);
-        const log = JSON.parse(localStorage.getItem('fbi_log') || '[]');
-        log.push({ name: data.name, age: data.age, score: data.score, date: data.date });
-        localStorage.setItem('fbi_log', JSON.stringify(log.slice(-200))); // keep last 200
-        console.log(`[FBI] Plays on this device: ${count} | Latest: ${data.name}, age ${data.age}, score ${data.score}/5`);
-      } catch (_) { /* storage blocked — game continues fine */ }
-
-      // ── GOOGLE SHEETS (paste your Apps Script URL in CFG) ────
-      if (!CFG.SHEETS_WEBHOOK || CFG.SHEETS_WEBHOOK === 'YOUR_APPS_SCRIPT_URL') {
-        console.log('[Sheets] Webhook not configured. Would have saved:', data);
-        return;
-      }
-      try {
-        await fetch(CFG.SHEETS_WEBHOOK + '?' + new URLSearchParams(data).toString(), {
-          method: 'GET',
-          mode: 'no-cors',
-        });
-      } catch (e) {
-        console.warn('[Sheets] Save failed (game unaffected):', e);
+      // ── FORMSPREE TRACKING (paste URL into CFG.TRACKING_URL) ─
+      // Players never leave the game — this runs silently in background.
+      // View responses at formspree.io/dashboard or in the linked Google Sheet.
+      if (CFG.TRACKING_URL) {
+        try {
+          await fetch(CFG.TRACKING_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({
+              name: data.name,
+              age: data.age,
+              score: `${data.score}/5`,
+              title: data.title,
+              product: data.product_name,
+              date: data.date,
+            }),
+          });
+        } catch (e) {
+          // Silent fail — game unaffected
+        }
       }
     }
 
@@ -1974,39 +2152,45 @@
       const sc = S.score;
       const title = TITLES[sc];
       const c = S.today;
+      const btn = document.getElementById('btn-share-img');
 
-      const shareText = `🔍 FBI Case Files\n\nI scored ${sc}/5 as ${title}!\nToday's case: ${c.product_name}\n\nCan you beat me? Play here 👇\n${CFG.GAME_URL}`;
+      const shareText = `🔍 FBI Case Files\n\nI scored ${sc}/5 as ${title}!\nToday's case: ${c.product_name}\n\nCan you beat me? 👇\n${CFG.GAME_URL}`;
 
-      // Native share sheet — opens WhatsApp, iMessage, etc. cleanly (text only, no file)
-      if (navigator.share) {
+      if (btn) { btn.textContent = '⏳ Generating…'; btn.disabled = true; }
+      const blob = await generateImageBlob(sc, title, c);
+      if (btn) { btn.textContent = '📸 Save My Score Card'; btn.disabled = false; }
+
+      if (!blob) return;
+
+      // Try native share with image + text (WhatsApp, iMessage, etc.)
+      const file = new File([blob], 'fbi-score-card.png', { type: 'image/png' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
         try {
-          await navigator.share({
-            title: `FBI Case Files — ${title}`,
-            text: shareText,
-          });
-          // After sharing, offer the score card image for saving
-          setTimeout(() => generateAndOfferImage(sc, title, c), 600);
+          await navigator.share({ title: 'FBI Case Files', text: shareText, files: [file] });
           return;
         } catch (e) {
-          if (e.name === 'AbortError') return; // user cancelled — do nothing
+          if (e.name === 'AbortError') return;
         }
       }
 
-      // Desktop fallback: copy text + download image
-      try { await navigator.clipboard.writeText(shareText); }
-      catch { /* clipboard blocked */ }
-      generateAndOfferImage(sc, title, c);
+      // Fallback: download image + copy text to clipboard
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'fbi-score-card.png';
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 5000);
+      try { await navigator.clipboard.writeText(shareText); } catch { /* blocked */ }
     }
 
-    /** Draws the score card onto canvas and triggers a download / save. */
-    async function generateAndOfferImage(sc, title, c) {
+    /** Renders score card onto canvas and returns a Promise<Blob|null>. */
+    async function generateImageBlob(sc, title, c) {
       const canvas = document.getElementById('share-canvas');
       const SIZE = 1080;
       canvas.width = SIZE;
       canvas.height = SIZE;
       const ctx = canvas.getContext('2d');
 
-      // 1. Background: try product image, fall back to teal gradient
+      // 1. Background: product image or teal gradient
       let painted = false;
       if (c.generated_photo_link) {
         try {
@@ -2065,14 +2249,8 @@
       ctx.font = `bold 28px sans-serif`;
       ctx.fillText(CFG.GAME_URL, 64, SIZE * 0.97);
 
-      // 4. Download / save
-      canvas.toBlob(blob => {
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url; a.download = 'fbi-score-card.png';
-        a.click();
-        setTimeout(() => URL.revokeObjectURL(url), 5000);
-      }, 'image/png');
+      // 4. Return blob
+      return new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
     }
 
     /* ═══════════════════════════════════════════════════════════
