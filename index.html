@@ -124,7 +124,7 @@
     }
 
     .logo-title {
-      font-size: 28px;
+      font-size: 26px;
       font-weight: 900;
       color: var(--teal);
       letter-spacing: -0.5px;
@@ -301,15 +301,52 @@
       color: var(--teal);
     }
 
+    /* ─── HOME LAYOUT ───────────────────────────────────────── */
+    #screen-home {
+      padding: 0;
+      gap: 0;
+      justify-content: flex-start;
+    }
+
+    .home-hero-img-wrap {
+      width: 100%;
+      height: 260px;
+      overflow: hidden;
+      flex-shrink: 0;
+      background: linear-gradient(135deg, #E0F2F1 0%, #B2DFDB 100%);
+    }
+
+    .home-hero-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+    }
+
+    .home-core {
+      padding: 20px 20px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .home-footer {
+      margin-top: auto;
+      padding: 0 20px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
     /* ─── HOME TAGLINE ──────────────────────────────────────── */
     .home-tagline {
       background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dk) 100%);
       border-radius: var(--r);
-      padding: 24px 22px;
+      padding: 20px 20px;
       color: #fff;
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 800;
-      line-height: 1.4;
+      line-height: 1.45;
     }
 
     .home-tagline em {
@@ -1326,24 +1363,34 @@
 
     <!-- ── HOME ─────────────────────────────────────────────────── -->
     <div id="screen-home" class="screen off">
-      <div class="logo">
-        <div class="logo-icon">🔍</div>
-        <div class="logo-title">FBI Case Files</div>
-        <div class="logo-sub">Food &amp; Beverage Investigator</div>
+
+      <!-- Hero image -->
+      <div class="home-hero-img-wrap">
+        <img class="home-hero-img" src="./data/hero.png" alt="FBI Detective" onerror="this.style.display='none'" />
       </div>
 
-      <div class="home-tagline">
-        Every pack tells a story.<br>Are you brave enough to find the <em>full</em> truth?
+      <!-- Core content -->
+      <div class="home-core">
+        <div class="logo">
+          <div class="logo-title">FBI Case Files</div>
+          <div class="logo-sub">Food &amp; Beverage Investigator</div>
+        </div>
+
+        <div class="home-tagline">
+          Every pack tells a story.<br>Are you brave enough to find the <em>full</em> truth?
+        </div>
+
+        <button id="btn-start-home" class="btn btn-primary" onclick="goToRules()">🕵️ Open Today's Case</button>
       </div>
 
-      <button id="btn-start-home" class="btn btn-primary" onclick="goToRules()">🕵️ Open Today's Case</button>
-
-      <div class="timer-line">Next case drops in <b id="home-timer">--:--:--</b></div>
-
-      <div class="home-meta">
-        <button class="btn-info" onclick="openModal('modal-info')">ℹ️ About this game</button>
-        <span>By <a href="https://www.linkedin.com/in/yajur-lath-4ba192158/" target="_blank"
-            rel="noopener"><strong>Yajur Lath</strong></a></span>
+      <!-- Footer pushed to bottom -->
+      <div class="home-footer">
+        <div class="timer-line">Next case drops in <b id="home-timer">--:--:--</b></div>
+        <div class="home-meta">
+          <button class="btn-info" onclick="openModal('modal-info')">ℹ️ About this game</button>
+          <span>By <a href="https://www.linkedin.com/in/yajur-lath-4ba192158/" target="_blank"
+              rel="noopener"><strong>Yajur Lath</strong></a></span>
+        </div>
       </div>
     </div>
 
@@ -1366,14 +1413,14 @@
           <div class="rules-step-num">2</div>
           <div class="rules-step-body">
             <div class="rules-step-title">Study the pack</div>
-            <div class="rules-step-desc">Read the Front, Ingredients, and Nutrition tabs — all the clues are there</div>
+            <div class="rules-step-desc">Read the Front, Ingredients, and Nutrition tabs. All the clues are there.</div>
           </div>
         </div>
         <div class="rules-step">
           <div class="rules-step-num">3</div>
           <div class="rules-step-body">
             <div class="rules-step-title">Crack 5 claims</div>
-            <div class="rules-step-desc">The FBI gives you statements about the pack — you decide True or False</div>
+            <div class="rules-step-desc">The FBI gives you 5 statements about the pack. You pick True or False for each one.</div>
           </div>
         </div>
         <div class="rules-step">
@@ -1406,7 +1453,7 @@
             class="cat-soon-badge">Soon</span></div>
       </div>
 
-      <button class="btn btn-primary" onclick="goToRegister()">Got it — Open the Case 🗂️</button>
+      <button class="btn btn-primary" onclick="goToRegister()">Got it. Open the Case 🗂️</button>
       <button class="btn btn-ghost" onclick="goTo('home')">← Back</button>
     </div>
 
@@ -1529,7 +1576,7 @@
       <div class="review-list" id="review-list"></div>
 
       <div class="actions">
-        <button class="btn btn-mango" id="btn-share-img" onclick="shareScore()">📸 Save My Score Card</button>
+        <button class="btn btn-mango" id="btn-share-img" onclick="shareScore()">📤 Share with Friends</button>
         <button class="btn btn-outline" onclick="openModal('modal-notes')">📋 Case Notes</button>
         <button class="btn btn-ghost" onclick="playAgain()">🔄 Play Again</button>
       </div>
@@ -1554,13 +1601,9 @@
         <button class="modal-close" onclick="closeModal('modal-info')">✕</button>
       </div>
       <div class="modal-body">
-        <p>Learning about the world should be the most exciting thing you do. Not the most boring. This game was built
-          on that belief.</p>
-        <p>Every day, you buy food and drink that comes in a pack. That pack talks to you — loudly. <strong>"Real
-            fruit!" "Natural!" "High in protein!"</strong> But is it telling the whole truth?</p>
-        <p>The FBI gives you the tools to find out. Read the front. Study the ingredients. Check the nutrition. Then
-          crack five claims — and see how much the pack was hiding.</p>
-        <p>One case a day. Five minutes. A skill you'll use for the rest of your life.</p>
+        <p>Every day, you eat and drink things that come in a pack. That pack says things on the front. But is it telling you the full story?</p>
+        <p>The FBI teaches you to read labels like a detective. Check the front. Look at the ingredients. Read the nutrition. Then answer 5 claims and find out what the pack was hiding.</p>
+        <p>One case a day. Five minutes. A skill you will use for the rest of your life.</p>
 
         <p
           style="font-size:13px; font-weight:900; text-transform:uppercase; letter-spacing:1.5px; color:var(--teal); margin-bottom:0;">
@@ -1568,11 +1611,11 @@
         <div class="how-steps">
           <div class="how-step">
             <div class="how-step-icon">📦</div>
-            <div class="how-step-text">Inspect the pack — front, ingredients &amp; nutrition</div>
+            <div class="how-step-text">Inspect the pack: front, ingredients &amp; nutrition</div>
           </div>
           <div class="how-step">
             <div class="how-step-icon">🔍</div>
-            <div class="how-step-text">Crack 5 claims — True or False?</div>
+            <div class="how-step-text">Crack 5 claims: True or False?</div>
           </div>
           <div class="how-step">
             <div class="how-step-icon">🏆</div>
@@ -1581,8 +1624,7 @@
         </div>
 
         <p style="padding-top: 8px; border-top: 1px solid var(--border); margin-bottom:0;">✨ <em>Inspired by
-            <strong>Shashank Mehta</strong> and his work at <strong>The Whole Truth</strong> — a brand that believes
-            honest food starts with honest labels.</em></p>
+            <strong>Shashank Mehta</strong> and his work at <strong>The Whole Truth</strong>. A brand that believes honest food starts with honest labels.</em></p>
       </div>
     </div>
   </div>
@@ -2086,7 +2128,7 @@
       document.getElementById('notes-body').innerHTML =
         `<p><strong>🔍 Case verdict:</strong><br>${caseNote || 'No notes for this case.'}</p>
          <p style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);font-size:13px;color:var(--muted);line-height:1.75;">
-           🧠 <strong>Rule to remember:</strong> Ingredients are always listed from most to least — whatever is first is what the product is mostly made of. Front-of-pack claims are chosen by the brand's marketing team. They only show you what helps sell the product. The back label tells the real story.
+           🧠 <strong>Rule to remember:</strong> Ingredients are always listed from most to least. Whatever comes first is what the product is mostly made of. The front of the pack shows what the brand wants you to see. The back tells the full story.
          </p>`;
 
       // Review
@@ -2161,7 +2203,7 @@
 
       if (btn) { btn.textContent = '⏳ Generating…'; btn.disabled = true; }
       const blob = await generateImageBlob(sc, title, c);
-      if (btn) { btn.textContent = '📸 Save My Score Card'; btn.disabled = false; }
+      if (btn) { btn.textContent = '📤 Share with Friends'; btn.disabled = false; }
 
       if (!blob) return;
 
