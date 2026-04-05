@@ -1713,18 +1713,21 @@
         S.today = S.cases.find(r => parseInt(r['#']) === num) || null;
 
         if (S.today) {
-          document.getElementById('today-name').textContent = S.today.product_name || 'Unknown product';
-          document.getElementById('today-brand').textContent = [S.today.brand, S.today.category].filter(Boolean).join(' · ');
-          // Show today's product image on home card
+          const elName = document.getElementById('today-name');
+          const elBrand = document.getElementById('today-brand');
+          if (elName) elName.textContent = S.today.product_name || 'Unknown product';
+          if (elBrand) elBrand.textContent = [S.today.brand, S.today.category].filter(Boolean).join(' · ');
           const todayImg = document.getElementById('today-img');
-          if (S.today.generated_photo_link) {
+          if (todayImg && S.today.generated_photo_link) {
             todayImg.src = S.today.generated_photo_link;
             todayImg.style.display = '';
             todayImg.onerror = () => { todayImg.style.display = 'none'; };
           }
         } else {
-          document.getElementById('today-name').textContent = 'No case today.';
-          document.getElementById('today-brand').textContent = 'Please check back soon!';
+          const elName = document.getElementById('today-name');
+          const elBrand = document.getElementById('today-brand');
+          if (elName) elName.textContent = 'No case today.';
+          if (elBrand) elBrand.textContent = 'Please check back soon!';
           document.getElementById('btn-start-home').disabled = true;
         }
 
