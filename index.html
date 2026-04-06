@@ -306,36 +306,126 @@
       padding: 0;
       gap: 0;
       justify-content: flex-start;
+      background-image: url('https://res.cloudinary.com/dacuzjrcg/image/upload/q_auto/f_auto/v1775423662/Generated_Image_April_05_2026_-_10_59PM_wmstpv.jpg');
+      background-size: cover;
+      background-position: center top;
+      background-repeat: no-repeat;
     }
 
+    /* Image is now the screen background — hide old img wrapper */
     .home-hero-img-wrap {
-      width: 100%;
-      height: 260px;
-      overflow: hidden;
-      flex-shrink: 0;
-      background: linear-gradient(135deg, #E0F2F1 0%, #B2DFDB 100%);
+      display: none;
     }
 
-    .home-hero-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center top;
+    /* Spacer that shows the background image above the content cards */
+    .home-spacer {
+      height: 210px;
+      flex-shrink: 0;
     }
 
     .home-core {
+      background: rgba(255, 253, 247, 0.94);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
       padding: 20px 20px 16px;
       display: flex;
       flex-direction: column;
       gap: 16px;
     }
 
+    /* Practice section */
+    .home-practice {
+      background: rgba(255, 253, 247, 0.94);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      padding: 0 20px 18px;
+      border-top: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .practice-label {
+      font-size: 11px;
+      font-weight: 900;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      padding: 14px 0 10px;
+    }
+
+    .practice-cards-row {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .practice-cards-row::-webkit-scrollbar { display: none; }
+
+    .practice-card {
+      flex-shrink: 0;
+      width: 130px;
+      background: var(--card);
+      border-radius: 14px;
+      box-shadow: var(--sh);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform .15s;
+    }
+
+    .practice-card:active { transform: scale(0.95); }
+
+    .practice-card-img {
+      width: 100%;
+      height: 82px;
+      object-fit: cover;
+      background: #F1F5F9;
+      display: block;
+    }
+
+    .practice-card-info {
+      padding: 8px 10px 10px;
+    }
+
+    .practice-card-name {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.3;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .practice-card-cat {
+      font-size: 10px;
+      color: var(--muted);
+      font-weight: 600;
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .practice-card-play {
+      font-size: 10px;
+      font-weight: 900;
+      color: var(--teal);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-top: 5px;
+    }
+
     .home-footer {
+      background: rgba(255, 253, 247, 0.94);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
       margin-top: auto;
-      padding: 0 20px 32px;
+      padding: 14px 20px 32px;
       display: flex;
       flex-direction: column;
       gap: 10px;
+      border-top: 1px solid rgba(0,0,0,0.06);
     }
 
     /* ─── HOME TAGLINE ──────────────────────────────────────── */
@@ -1364,10 +1454,8 @@
     <!-- ── HOME ─────────────────────────────────────────────────── -->
     <div id="screen-home" class="screen off">
 
-      <!-- Hero image -->
-      <div class="home-hero-img-wrap">
-        <img class="home-hero-img" src="./data/hero.png" alt="FBI Detective" onerror="this.style.display='none'" />
-      </div>
+      <!-- Spacer that reveals background image at top -->
+      <div class="home-spacer"></div>
 
       <!-- Core content -->
       <div class="home-core">
@@ -1380,14 +1468,22 @@
           Every pack tells a story.<br>Are you brave enough to find the <em>full</em> truth?
         </div>
 
-        <button id="btn-start-home" class="btn btn-primary" onclick="goToRules()">🕵️ Open Today's Case</button>
+        <button id="btn-start-home" class="btn btn-primary" onclick="goToRules()">Open Today's Case</button>
+      </div>
+
+      <!-- Practice cases section -->
+      <div class="home-practice">
+        <div class="practice-label">Try a Practice Case</div>
+        <div id="practice-cards" class="practice-cards-row">
+          <!-- filled by JS -->
+        </div>
       </div>
 
       <!-- Footer pushed to bottom -->
       <div class="home-footer">
         <div class="timer-line">Next case drops in <b id="home-timer">--:--:--</b></div>
         <div class="home-meta">
-          <button class="btn-info" onclick="openModal('modal-info')">ℹ️ About this game</button>
+          <button class="btn-info" onclick="openModal('modal-info')">About this game</button>
           <span>By <a href="https://www.linkedin.com/in/yajur-lath-4ba192158/" target="_blank"
               rel="noopener"><strong>Yajur Lath</strong></a></span>
         </div>
@@ -1514,7 +1610,7 @@
             <img id="product-img" class="product-img" src="" alt="Product" />
           </div>
           <div class="front-claim-box">
-            <div class="front-claim-label">📢 Says on the front</div>
+            <div class="front-claim-label">What the front says</div>
             <div id="front-claim-text" class="front-claim-text">—</div>
           </div>
         </div>
@@ -1547,11 +1643,11 @@
 
         <div class="claim-text" id="claim-text">Loading…</div>
 
-        <div class="claim-directive">👆 Study the tabs above first, then decide</div>
+        <div class="claim-directive">Study the tabs above, then decide</div>
 
         <div class="answer-btns" id="answer-btns">
-          <button class="btn-true" id="btn-true" onclick="answer(true)">✅ True</button>
-          <button class="btn-false" id="btn-false" onclick="answer(false)">❌ False</button>
+          <button class="btn-true" id="btn-true" onclick="answer(true)">True</button>
+          <button class="btn-false" id="btn-false" onclick="answer(false)">False</button>
         </div>
 
         <div class="feedback-box" id="feedback-box">
@@ -1649,7 +1745,7 @@
        CONFIG — edit these values after deployment
     ═══════════════════════════════════════════════════════════ */
     const CFG = {
-      LAUNCH_DATE: '2026-04-01',          // Case #1 goes live on this IST date
+      LAUNCH_DATE: '2026-04-06',          // Case #1 goes live on this IST date (today = day 2)
       CSV_PATH: './data/cases.csv',
       // ── PLAYER TRACKING (Formspree — see SETUP.md for 3-step instructions) ──
       // Go to formspree.io → create form → paste the endpoint URL below
@@ -1752,7 +1848,9 @@
 
         const dateStr = activeDateIST();
         const num = caseNumberForDate(dateStr);
-        S.today = S.cases.find(r => parseInt(r['#']) === num) || null;
+        // Shuffle the cases with a fixed seed — the day number picks the index
+        const shuffledForDaily = seededShuffle(S.cases, DAILY_SEED);
+        S.today = shuffledForDaily[(num - 1) % shuffledForDaily.length] || null;
 
         if (S.today) {
           const elName = document.getElementById('today-name');
@@ -1773,6 +1871,7 @@
           document.getElementById('btn-start-home').disabled = true;
         }
 
+        buildPractice();
         startCountdown();
         goTo('home');
       } catch (err) {
@@ -1834,6 +1933,11 @@
       if (!ok) return;
 
       S.user = { name, age };
+      S.isPractice = false;
+      // Restore today's case if a practice game changed it
+      const shuffledForDaily2 = seededShuffle(S.cases, DAILY_SEED);
+      const dayNum2 = caseNumberForDate(activeDateIST());
+      S.today = shuffledForDaily2[(dayNum2 - 1) % shuffledForDaily2.length] || S.today;
       buildInvestigate();
       goTo('investigate');
     }
@@ -1876,7 +1980,7 @@
     }
 
     /* ═══════════════════════════════════════════════════════════
-       SHUFFLE (Fisher–Yates)
+       SHUFFLE (Fisher–Yates) — random
     ═══════════════════════════════════════════════════════════ */
     function shuffle(arr) {
       const a = [...arr];
@@ -1886,6 +1990,26 @@
       }
       return a;
     }
+
+    /* ═══════════════════════════════════════════════════════════
+       SEEDED SHUFFLE — deterministic; same seed = same order
+       Uses xorshift32 PRNG so the daily case is the same for
+       everyone on a given day, but the sequence is shuffled.
+    ═══════════════════════════════════════════════════════════ */
+    function seededShuffle(arr, seed) {
+      let s = seed >>> 0 || 1;
+      function next() {
+        s ^= s << 13; s ^= s >>> 17; s ^= s << 5;
+        return (s >>> 0) / 0xFFFFFFFF;
+      }
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(next() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+    const DAILY_SEED = 20260401; // Fixed seed — never change; changing it reorders all past days
 
     /* ═══════════════════════════════════════════════════════════
        BUILD INVESTIGATE SCREEN
@@ -1910,8 +2034,11 @@
       }
       S.claims = shuffle(raw);
 
-      // Header
-      document.getElementById('inv-num').textContent = `Case #${String(c['#']).padStart(2, '0')}`;
+      // Header — show day number for daily game, or CSV # for practice
+      const displayNum = S.isPractice
+        ? c['#']
+        : String(caseNumberForDate(activeDateIST())).padStart(2, '0');
+      document.getElementById('inv-num').textContent = `Case #${displayNum}`;
       document.getElementById('inv-title').textContent = c.product_name || 'Unknown Product';
 
       // Progress dots — reset
@@ -2084,9 +2211,9 @@
 
       // Feedback
       const fb = document.getElementById('feedback-box');
-      document.getElementById('fb-emoji').textContent = correct ? '✅' : '❌';
+      document.getElementById('fb-emoji').textContent = '';
       document.getElementById('fb-text').innerHTML =
-        `<strong>${correct ? 'Correct!' : 'Not quite.'}</strong><br>${claim.hint}`;
+        `<strong>${correct ? 'Correct.' : 'Not right.'}</strong> ${claim.hint}`;
       fb.className = 'feedback-box show ' + (correct ? 'ok' : 'bad');
 
       // Shake on wrong
@@ -2160,6 +2287,50 @@
     function playAgain() {
       // Keep name/age pre-filled; let player replay
       goTo('register');
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       PRACTICE SECTION — 5 random cards on home page
+    ═══════════════════════════════════════════════════════════ */
+    function buildPractice() {
+      const container = document.getElementById('practice-cards');
+      if (!container || !S.cases.length) return;
+
+      // Pick 5 random cases (exclude today if possible)
+      const pool = S.cases.filter(c => c !== S.today);
+      const picked = shuffle(pool).slice(0, 5);
+
+      container.innerHTML = '';
+      picked.forEach(c => {
+        const card = document.createElement('div');
+        card.className = 'practice-card';
+        card.onclick = () => playPracticeCase(c);
+
+        const imgHTML = c.generated_photo_link
+          ? `<img class="practice-card-img" src="${c.generated_photo_link}" alt="${c.product_name || ''}" loading="lazy" onerror="this.style.background='#F1F5F9';" />`
+          : `<div class="practice-card-img" style="display:flex;align-items:center;justify-content:center;font-size:28px;background:#F1F5F9;">?</div>`;
+
+        card.innerHTML = `${imgHTML}
+          <div class="practice-card-info">
+            <div class="practice-card-name">${c.product_name || 'Unknown'}</div>
+            <div class="practice-card-cat">${c.category || c.brand || ''}</div>
+            <div class="practice-card-play">Play</div>
+          </div>`;
+        container.appendChild(card);
+      });
+    }
+
+    function playPracticeCase(c) {
+      // Save current today so results screen isn't confused
+      const savedToday = S.today;
+      S.today = c;
+      S.isPractice = true;
+      // Use any existing name/age, otherwise a guest name
+      if (!S.user || !S.user.name) {
+        S.user = { name: 'Guest', age: 0 };
+      }
+      buildInvestigate();
+      goTo('investigate');
     }
 
     /* ═══════════════════════════════════════════════════════════
